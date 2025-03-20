@@ -3333,7 +3333,7 @@ body.white {
   bottom: 0;
   left: 0;
   right: 0;
-  box-shadow: inset 0 0 0 2000px rgba(42, 42, 114, 0.3);
+  /* box-shadow: inset 0 0 0 2000px rgba(42, 42, 114, 0.3); */
   filter: contrast(1.1) brightness(1.1);
 }
 .card {
@@ -3459,7 +3459,7 @@ body.white {
   gap: 10px;
   transition: all 0.3s ease;
   width: 100%;
-  padding: 2px 0;
+  padding: 3px 3px;
 }
 
 .social-buttons:hover .social-round-icon {
@@ -4075,4 +4075,55 @@ a,
 
 .fa-icon {
   text-decoration: none !important;
+}
+
+.card-block p {
+  padding-right: 30px;
+}
+
+.profile-image {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .twitter-tweet {
+    max-width: 93% !important;
+    width: 93% !important;
+  }
+  .card-block p {
+    padding-right: unset;
+  }
+}
+
+.social-round-icon.fa-icon {
+  transition: all 0.3s ease;
+  display: inline-block;
+  margin: 0 3px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  text-align: center;
+  line-height: 32px;
+  color: #666;
+}
+
+.social-round-icon.fa-icon:hover {
+  transform: translateY(-3px) scale(1.1);
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.social-round-icon.fa-icon i {
+  transition: transform 0.3s ease;
+}
+
+.social-round-icon.fa-icon:hover i {
+  transform: rotate(360deg);
 }
