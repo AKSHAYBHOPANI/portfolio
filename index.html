@@ -70,17 +70,23 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html {
-      scroll-behavior: smooth; scroll-padding-top: 90px;
-      overflow-x: hidden;
+      scroll-behavior: smooth;
+      /* Offset fixed nav when jumping to #ids (native + scrollIntoView) */
+      scroll-padding-top: 90px;
+      overflow-x: clip;
     }
     body {
       background: var(--bg); color: var(--ink);
       font-family: var(--body); line-height: 1.65; font-size: 16px;
-      overflow-x: hidden;
+      overflow-x: clip;
       -webkit-font-smoothing: antialiased;
       /* Prevent iOS Safari text inflation from blowing up layout */
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
+    }
+    /* Ensure every in-page section clears the fixed nav */
+    section[id], header[id] {
+      scroll-margin-top: 90px;
     }
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
@@ -195,8 +201,10 @@
     body.menu-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     /* Keep nav + menu usable while open (ignore hide-on-scroll transform) */
+    html.menu-open,
     body.menu-open {
-      overflow: hidden;
+      overflow: hidden !important;
+      overscroll-behavior: none;
     }
     body.menu-open .nav {
       transform: none !important;
@@ -1286,7 +1294,6 @@
   </footer>
 
   <script async defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js" defer></script>
   <script>
     (function () {
       "use strict";
@@ -1295,6 +1302,9 @@
       if (flat) {
         reduced = true;
         document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("visible"); });
+      }
+      if (reduced) {
+        document.documentElement.style.scrollBehavior = "auto";
       }
 
       /* ---------- preloader ---------- */
@@ -1319,98 +1329,83 @@
         }
       }, 70);
 
-      /* ---------- nav + hash scroll ---------- */
+      /* ---------- nav + native hash scroll (no Lenis — it broke #section links) ---------- */
       var nav = document.getElementById("nav");
       var toggle = document.getElementById("navToggle");
       var navLinks = document.getElementById("navLinks");
       var lastY = 0;
-      var menuScrollY = 0;
 
       function getScrollY() {
-        return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
       }
 
-      function unlockBodyScroll() {
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.left = "";
-        document.body.style.right = "";
-        document.body.style.width = "";
+      /** Resolve #about / #skills / #top → element */
+      function resolveHashTarget(href) {
+        if (!href || href.charAt(0) !== "#") return null;
+        if (href === "#" || href === "#top") return document.getElementById("top") || document.body;
+        return document.getElementById(href.slice(1));
       }
 
-      function lockBodyScroll() {
-        menuScrollY = getScrollY();
-        document.body.style.position = "fixed";
-        document.body.style.top = "-" + menuScrollY + "px";
-        document.body.style.left = "0";
-        document.body.style.right = "0";
-        document.body.style.width = "100%";
-      }
-
-      function restoreScrollPos() {
-        unlockBodyScroll();
-        if (window.__lenis) {
-          window.__lenis.start();
-          window.__lenis.scrollTo(menuScrollY, { immediate: true });
-        } else {
-          window.scrollTo(0, menuScrollY);
-        }
-      }
-
+      /**
+       * Scroll to a section id using several fallbacks.
+       * Instant jump first (always works), optional smooth polish second.
+       */
       function scrollToHash(href) {
-        if (!href || href === "#") return false;
-        if (href === "#top") {
-          if (window.__lenis) window.__lenis.scrollTo(0);
-          else window.scrollTo({ top: 0, behavior: "smooth" });
-          return true;
-        }
-        var target = document.querySelector(href);
+        var target = resolveHashTarget(href);
         if (!target) return false;
 
-        /* Prefer native distance — more reliable after menu unlock on iOS */
-        var top = Math.max(0, target.getBoundingClientRect().top + getScrollY() - 80);
+        var y = getScrollY();
+        var top = 0;
+        if (href !== "#" && href !== "#top") {
+          top = Math.max(0, Math.round(target.getBoundingClientRect().top + y - 90));
+        }
 
-        if (window.__lenis) {
+        /* Ensure nothing is locking the page scroll */
+        document.documentElement.classList.remove("menu-open");
+        document.body.classList.remove("menu-open");
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+
+        /* Instant position (Safari-safe; smooth can silently no-op) */
+        window.scrollTo(0, top);
+        document.documentElement.scrollTop = top;
+        document.body.scrollTop = top;
+
+        if (!reduced) {
           try {
-            window.__lenis.scrollTo(target, { offset: -80 });
-          } catch (err) {
-            window.__lenis.scrollTo(top);
-          }
-        } else {
-          window.scrollTo({ top: top, behavior: "smooth" });
+            window.scrollTo({ top: top, left: 0, behavior: "smooth" });
+          } catch (err) { /* keep instant position */ }
+        }
+
+        if (history.replaceState) {
+          try {
+            history.replaceState(null, "", href === "#top" ? (location.pathname + location.search) : href);
+          } catch (e) { /* ignore */ }
         }
         return true;
       }
 
       function setMenuOpen(open) {
-        document.body.classList.toggle("menu-open", !!open);
+        open = !!open;
+        document.documentElement.classList.toggle("menu-open", open);
+        document.body.classList.toggle("menu-open", open);
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
-
-        if (open) {
-          nav.classList.remove("hidden");
-          lockBodyScroll();
-          if (window.__lenis) window.__lenis.stop();
-        } else {
-          restoreScrollPos();
-        }
+        if (open) nav.classList.remove("hidden");
       }
 
-      /**
-       * Close the mobile menu, then navigate.
-       * Hash links need unlock → restore → delayed scroll (iOS + Lenis).
-       * External links keep default browser navigation (incl. target=_blank).
-       */
-      function closeMenuThen(navigateFn) {
-        if (!document.body.classList.contains("menu-open")) {
-          if (navigateFn) navigateFn();
-          return;
+      function goToNavHref(href) {
+        var wasOpen = document.body.classList.contains("menu-open");
+        if (wasOpen) setMenuOpen(false);
+
+        function run() {
+          scrollToHash(href);
         }
-        document.body.classList.remove("menu-open");
-        toggle.setAttribute("aria-expanded", "false");
-        restoreScrollPos();
-        if (navigateFn) {
-          /* Wait for fixed-body unlock + Lenis restart to settle */
-          setTimeout(navigateFn, 80);
+
+        if (wasOpen) {
+          /* Wait for overflow unlock so the page can actually scroll */
+          setTimeout(run, 60);
+        } else {
+          run();
         }
       }
 
@@ -1421,63 +1416,49 @@
         nav.classList.toggle("hidden", y > 400 && y > lastY);
         lastY = y;
         var h = document.documentElement.scrollHeight - window.innerHeight;
-        document.getElementById("progress").style.transform = "scaleX(" + (h ? y / h : 0) + ")";
+        var progress = document.getElementById("progress");
+        if (progress) progress.style.transform = "scaleX(" + (h > 0 ? y / h : 0) + ")";
       }, { passive: true });
 
       toggle.addEventListener("click", function (e) {
         e.preventDefault();
-        e.stopPropagation();
         setMenuOpen(!document.body.classList.contains("menu-open"));
       });
 
+      /* Capture phase so nothing else can cancel section navigation */
       navLinks.addEventListener("click", function (e) {
         var a = e.target.closest("a");
         if (!a || !navLinks.contains(a)) return;
 
         var href = a.getAttribute("href") || "";
-
-        /* In-page section links */
-        if (href.charAt(0) === "#") {
-          e.preventDefault();
-          closeMenuThen(function () { scrollToHash(href); });
+        if (href.charAt(0) !== "#") {
+          if (document.body.classList.contains("menu-open")) setMenuOpen(false);
           return;
         }
 
-        /* External / Call / Resume — close overlay, let the browser follow the link */
-        if (document.body.classList.contains("menu-open")) {
-          document.body.classList.remove("menu-open");
-          toggle.setAttribute("aria-expanded", "false");
-          restoreScrollPos();
-        }
-      });
+        e.preventDefault();
+        goToNavHref(href);
+      }, true);
 
       window.addEventListener("keydown", function (e) {
         if (e.key === "Escape" && document.body.classList.contains("menu-open")) setMenuOpen(false);
       });
 
-      /* ---------- lenis smooth scroll ---------- */
-      window.addEventListener("load", function () {
-        if (window.Lenis && !reduced) {
-          var lenis = new Lenis({ lerp: 0.09 });
-          window.__lenis = lenis;
-          document.documentElement.style.scrollBehavior = "auto";
-          function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
-          requestAnimationFrame(raf);
-        }
-      });
-
-      /* Other in-page anchors (hero buttons, footer, brand) */
+      /* Hero / footer / brand in-page links */
       document.addEventListener("click", function (e) {
         var a = e.target.closest('a[href^="#"]');
         if (!a || a.closest("#navLinks")) return;
         var href = a.getAttribute("href");
         if (!href || href === "#") return;
-        if (href !== "#top" && !document.querySelector(href)) return;
+        if (!resolveHashTarget(href)) return;
         e.preventDefault();
-        if (document.body.classList.contains("menu-open")) {
-          closeMenuThen(function () { scrollToHash(href); });
-        } else {
-          scrollToHash(href);
+        goToNavHref(href);
+      });
+
+      /* Deep link on load: /portfolio#skills */
+      window.addEventListener("load", function () {
+        if (location.hash && resolveHashTarget(location.hash)) {
+          setTimeout(function () { scrollToHash(location.hash); }, 100);
         }
       });
 
