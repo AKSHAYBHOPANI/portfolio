@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-  <!-- Meta Tags -->
   <meta charset="UTF-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width,initial-scale=1" name="viewport">
@@ -17,19 +16,19 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@akshaybhopani">
   <meta name="google" content="notranslate" />
+  <meta name="theme-color" content="#060709">
 
-  <!-- Favicon -->
   <link rel="icon" sizes="180x180" href="./assets/apple-icon-180x180.png">
   <link rel="canonical" href="https://akshaybhopani.github.io/portfolio" />
 
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <title>Akshay Bhopani — Senior Web Engineer & Tech Content Creator</title>
 
-  <title>Akshay Bhopani - Senior Web Developer & Tech Content Creator | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link href="./main.d8e0d294.css" rel="stylesheet">
-
-  <!-- Structured Data -->
   <script type="application/ld+json">
     {
       "@context": "http://schema.org",
@@ -48,706 +47,1381 @@
       "alumniOf": "VIVEKANAND EDUCATION SOCIETY INSTITUTE OF TECHNOLOGY"
     }
   </script>
+
+  <style>
+    /* ================= TOKENS ================= */
+    :root {
+      --bg: #060709;
+      --bg-2: #0a0c10;
+      --card: #0d0f15;
+      --line: rgba(255, 255, 255, .08);
+      --line-strong: rgba(255, 255, 255, .16);
+      --ink: #f2f1ec;
+      --muted: #90959f;
+      --lime: #d6ff3f;
+      --violet: #7c5cff;
+      --cyan: #43e6ff;
+      --grad: linear-gradient(110deg, var(--lime), var(--cyan) 50%, var(--violet));
+      --display: "Clash Display", "Space Grotesk", sans-serif;
+      --body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      background: var(--bg); color: var(--ink);
+      font-family: var(--body); line-height: 1.65; font-size: 16px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; background: none; border: 0; color: inherit; cursor: pointer; }
+    ::selection { background: var(--lime); color: #000; }
+
+    /* film grain */
+    body::after {
+      content: ""; position: fixed; inset: -100%; z-index: 2000; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: .04;
+      animation: grain 8s steps(10) infinite;
+    }
+    @keyframes grain {
+      0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-5%, -10%); }
+      20% { transform: translate(-15%, 5%); } 30% { transform: translate(7%, -25%); }
+      40% { transform: translate(-5%, 25%); } 50% { transform: translate(-15%, 10%); }
+      60% { transform: translate(15%, 0); } 70% { transform: translate(0, 15%); }
+      80% { transform: translate(3%, 35%); } 90% { transform: translate(-10%, 10%); }
+    }
+
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+    .mono { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+
+    /* ================= PRELOADER ================= */
+    .preloader {
+      position: fixed; inset: 0; z-index: 4000; display: none;
+      background: var(--bg); align-items: center; justify-content: center;
+      transition: transform .9s var(--ease);
+    }
+    html.js .preloader { display: flex; }
+    .preloader.done { transform: translateY(-100%); }
+    .preloader-inner { text-align: center; }
+    .preloader-name {
+      font-family: var(--display); font-weight: 700; letter-spacing: .02em;
+      font-size: clamp(1.4rem, 4vw, 2.4rem); overflow: hidden;
+    }
+    .preloader-name span { display: inline-block; animation: rise 1s var(--ease) both; }
+    @keyframes rise { from { transform: translateY(110%); } to { transform: none; } }
+    .preloader-count { font-family: var(--mono); color: var(--lime); margin-top: 10px; font-size: .9rem; }
+
+    /* ================= CURSOR ================= */
+    .cursor-dot, .cursor-ring { display: none; }
+    @media (pointer: fine) {
+      html.js.has-cursor .cursor-dot, html.js.has-cursor .cursor-ring {
+        display: block; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 3000;
+        border-radius: 50%; transform: translate(-50%, -50%);
+      }
+      .cursor-dot { width: 6px; height: 6px; background: var(--lime); }
+      .cursor-ring {
+        width: 34px; height: 34px; border: 1px solid rgba(214, 255, 63, .6);
+        transition: width .25s, height .25s, background .25s, border-color .25s;
+      }
+      .cursor-ring.is-hover { width: 58px; height: 58px; background: rgba(214, 255, 63, .1); border-color: var(--lime); }
+    }
+
+    /* ================= SCROLL PROGRESS ================= */
+    .progress {
+      position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 1500;
+      background: var(--grad); transform-origin: 0 0; transform: scaleX(0);
+    }
+
+    /* ================= NAV ================= */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      transition: transform .45s var(--ease), background .3s;
+      background: linear-gradient(rgba(6, 7, 9, .85), rgba(6, 7, 9, 0));
+    }
+    .nav.solid { background: rgba(6, 7, 9, .82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); }
+    .nav.hidden { transform: translateY(-100%); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand { font-family: var(--display); font-weight: 700; font-size: 1.2rem; letter-spacing: .01em; display: flex; align-items: center; gap: 10px; }
+    .brand i { width: 9px; height: 9px; border-radius: 50%; background: var(--lime); display: inline-block; font-style: normal; box-shadow: 0 0 12px var(--lime); }
+    .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
+    .nav-links a { font-family: var(--mono); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); transition: color .2s; position: relative; }
+    .nav-links a::after {
+      content: ""; position: absolute; left: 0; bottom: -6px; height: 1px; width: 0;
+      background: var(--lime); transition: width .3s var(--ease);
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links a.cta {
+      color: #000; background: var(--lime); padding: 10px 20px; border-radius: 99px; font-weight: 500;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .nav-links a.cta::after { display: none; }
+    .nav-links a.cta:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(214, 255, 63, .35); color: #000; }
+    .nav-toggle { display: none; z-index: 1100; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--ink); margin: 6px 0; border-radius: 2px; transition: .3s var(--ease); }
+    body.menu-open .nav-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    body.menu-open .nav-toggle span:nth-child(2) { opacity: 0; }
+    body.menu-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    @media (max-width: 860px) {
+      .nav-toggle { display: block; }
+      .nav-links {
+        position: fixed; inset: 0; z-index: 1050; flex-direction: column; justify-content: center; gap: 8px;
+        background: rgba(6, 7, 9, .97); backdrop-filter: blur(20px);
+        opacity: 0; pointer-events: none; transition: opacity .35s;
+      }
+      body.menu-open .nav-links { opacity: 1; pointer-events: auto; }
+      .nav-links a { font-family: var(--display); font-size: 2rem; text-transform: none; letter-spacing: 0; padding: 10px; }
+      .nav-links a.cta { margin-top: 18px; font-size: 1rem; }
+    }
+
+    /* ================= HERO ================= */
+    .hero {
+      position: relative; min-height: 100svh; display: flex; flex-direction: column;
+      justify-content: center; overflow: hidden; padding-top: 90px;
+    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .5; pointer-events: none; }
+    .orb-1 { width: 480px; height: 480px; background: rgba(124, 92, 255, .35); top: -10%; right: -6%; animation: drift 14s ease-in-out infinite alternate; }
+    .orb-2 { width: 380px; height: 380px; background: rgba(67, 230, 255, .18); bottom: 4%; left: -8%; animation: drift 18s ease-in-out infinite alternate-reverse; }
+    .orb-3 { width: 260px; height: 260px; background: rgba(214, 255, 63, .12); top: 30%; left: 38%; animation: drift 22s ease-in-out infinite alternate; }
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(60px, -50px) scale(1.15); }
+    }
+    .hero-grid-lines {
+      position: absolute; inset: 0; pointer-events: none; opacity: .5;
+      background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 90px 90px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 75%);
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 75%);
+    }
+
+    .hero-inner { position: relative; z-index: 2; }
+    .hero-status {
+      display: inline-flex; align-items: center; gap: 12px; margin-bottom: 34px;
+      border: 1px solid var(--line-strong); border-radius: 99px; padding: 8px 18px 8px 8px;
+      background: rgba(255, 255, 255, .03); backdrop-filter: blur(8px);
+    }
+    .hero-status img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+    .hero-status .pulse { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #3dfc8e; }
+    .hero-status .pulse::after {
+      content: ""; position: absolute; inset: -4px; border-radius: 50%;
+      border: 1px solid #3dfc8e; animation: ping 1.8s ease-out infinite;
+    }
+    @keyframes ping { from { transform: scale(.5); opacity: 1; } to { transform: scale(1.8); opacity: 0; } }
+    .hero-status span { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .hero-status b { color: var(--ink); font-weight: 500; }
+
+    .hero h1 {
+      font-family: var(--display); font-weight: 700; text-transform: uppercase;
+      font-size: clamp(3.2rem, 10.5vw, 9.2rem); line-height: .95; letter-spacing: -.015em;
+    }
+    .hero h1 .line { display: block; overflow: hidden; }
+    .hero h1 .line-inner { display: block; transform: translateY(115%); }
+    html.js .hero.on h1 .line-inner { animation: heroRise 1.1s var(--ease) forwards; }
+    html:not(.js) .hero h1 .line-inner { transform: none; }
+    @keyframes heroRise { to { transform: none; } }
+    .hero h1 .stroke {
+      color: transparent; -webkit-text-stroke: 1.5px var(--ink);
+    }
+    .hero h1 .accent {
+      background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .hero-sub-row {
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
+      margin-top: 44px; flex-wrap: wrap;
+    }
+    .hero-role { font-family: var(--mono); font-size: .95rem; color: var(--muted); letter-spacing: .04em; }
+    .hero-role .scramble { color: var(--lime); }
+    .hero-sub { max-width: 460px; color: var(--muted); font-size: 1.05rem; }
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 26px; }
+
+    .btn {
+      position: relative; display: inline-flex; align-items: center; gap: 10px; overflow: hidden;
+      padding: 15px 30px; border-radius: 99px; font-weight: 600; font-size: .92rem;
+      transition: transform .25s var(--ease), box-shadow .25s, color .3s;
+      will-change: transform;
+    }
+    .btn-solid { background: var(--lime); color: #000; }
+    .btn-solid::before {
+      content: ""; position: absolute; inset: 0; background: #fff; border-radius: inherit;
+      transform: translateY(101%); transition: transform .35s var(--ease); z-index: 0;
+    }
+    .btn-solid:hover::before { transform: none; }
+    .btn-solid span { position: relative; z-index: 1; }
+    .btn-line { border: 1px solid var(--line-strong); color: var(--ink); background: rgba(255, 255, 255, .02); }
+    .btn-line:hover { border-color: var(--lime); color: var(--lime); }
+
+    .hero-scroll {
+      position: absolute; bottom: 96px; right: 40px; z-index: 3;
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--muted); writing-mode: vertical-rl;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-scroll::after {
+      content: ""; width: 1px; height: 56px; background: var(--muted);
+      animation: scrollHint 2s var(--ease) infinite;
+    }
+    @keyframes scrollHint { 0% { transform: scaleY(0); transform-origin: top; } 45% { transform: scaleY(1); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+    @media (max-width: 860px) { .hero-scroll { display: none; } }
+
+    /* marquee */
+    .marquee {
+      overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      padding: 18px 0; margin-top: auto; position: relative; z-index: 2;
+      background: rgba(255, 255, 255, .015);
+    }
+    .marquee-track { display: flex; gap: 0; width: max-content; animation: marquee 30s linear infinite; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    .marquee-item {
+      font-family: var(--display); font-weight: 600; text-transform: uppercase;
+      font-size: 1.05rem; letter-spacing: .06em; color: var(--muted);
+      display: flex; align-items: center; gap: 28px; padding-right: 28px; white-space: nowrap;
+    }
+    .marquee-item i { font-style: normal; color: var(--lime); font-size: .8rem; }
+    .marquee.rev .marquee-track { animation-direction: reverse; }
+
+    /* ================= SECTIONS ================= */
+    section { padding: 120px 0; position: relative; }
+    .sec-head { display: flex; align-items: baseline; gap: 26px; margin-bottom: 64px; flex-wrap: wrap; }
+    .sec-num { font-family: var(--mono); color: var(--lime); font-size: .85rem; letter-spacing: .15em; }
+    .sec-title {
+      font-family: var(--display); font-weight: 600; text-transform: uppercase;
+      font-size: clamp(2.2rem, 5.5vw, 4.2rem); letter-spacing: -.01em; line-height: 1;
+    }
+    .sec-title em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--ink); }
+    .sec-side { margin-left: auto; max-width: 340px; color: var(--muted); font-size: .95rem; align-self: flex-end; }
+    @media (max-width: 700px) { .sec-side { margin-left: 0; } }
+
+    /* reveal */
+    html.js .reveal { opacity: 0; transform: translateY(36px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: var(--d, 0s); }
+    html.js .reveal.visible { opacity: 1; transform: none; }
+
+    /* ================= ABOUT / BENTO ================= */
+    .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+    .bento > div {
+      background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+      padding: 30px; position: relative; overflow: hidden;
+    }
+    .b-photo { grid-column: span 4; grid-row: span 2; padding: 0 !important; min-height: 420px; }
+    .b-photo img { width: 100%; height: 100%; object-fit: cover; filter: saturate(1.05); transition: transform .6s var(--ease); }
+    .b-photo:hover img { transform: scale(1.04); }
+    .b-photo figcaption {
+      position: absolute; left: 16px; bottom: 16px; right: 16px;
+      background: rgba(6, 7, 9, .78); backdrop-filter: blur(10px);
+      border: 1px solid var(--line-strong); border-radius: 14px; padding: 12px 18px;
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    }
+    .b-photo figcaption b { color: var(--ink); display: block; font-size: .8rem; }
+    .b-bio { grid-column: span 8; }
+    .b-bio p { color: var(--muted); font-size: 1.06rem; max-width: 60ch; }
+    .b-bio p + p { margin-top: 14px; }
+    .b-bio b { color: var(--ink); font-weight: 600; }
+    .b-bio .quote {
+      margin-top: 22px; font-family: var(--display); font-weight: 500; font-size: 1.3rem; color: var(--ink);
+      display: flex; gap: 14px; align-items: center;
+    }
+    .b-bio .quote::before { content: ""; width: 34px; height: 2px; background: var(--grad); flex: none; }
+    .b-stat { grid-column: span 2; display: flex; flex-direction: column; justify-content: flex-end; min-height: 170px; }
+    .b-stat strong {
+      font-family: var(--display); font-weight: 700; font-size: clamp(2.2rem, 3.4vw, 3.2rem); line-height: 1;
+      background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .b-stat > span { color: var(--muted); font-size: .85rem; margin-top: 8px; }
+    .b-stat strong span { font: inherit; color: inherit; }
+    .b-now { grid-column: span 12; }
+    .b-now h3 { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--lime); margin-bottom: 14px; }
+    .b-now ul { list-style: none; color: var(--muted); font-size: .93rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 28px; }
+    @media (max-width: 980px) { .b-now ul { grid-template-columns: 1fr; gap: 9px; } }
+    .b-now li { display: flex; gap: 10px; align-items: baseline; }
+    .b-now li::before { content: "→"; color: var(--lime); font-family: var(--mono); }
+    @media (max-width: 980px) {
+      .b-photo { grid-column: span 6; }
+      .b-bio { grid-column: span 6; }
+      .b-stat { grid-column: span 3; }
+      .b-now { grid-column: span 12; }
+    }
+    @media (max-width: 640px) {
+      .b-photo, .b-bio, .b-stat, .b-now { grid-column: span 12; }
+      .b-photo { min-height: 380px; }
+      .b-stat { min-height: 120px; }
+    }
+
+    /* ================= WORK ================= */
+    #work { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+    .feature { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: 24px; overflow: hidden; background: var(--card); margin-bottom: 26px; }
+    .feature:nth-child(even) { grid-template-columns: 1fr 1.25fr; }
+    .feature:nth-child(even) .feature-media { order: 2; }
+    .feature-media { position: relative; overflow: hidden; min-height: 340px; }
+    .feature-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
+    .feature:hover .feature-media img { transform: scale(1.05); }
+    .feature-body { padding: 44px; display: flex; flex-direction: column; gap: 16px; justify-content: center; position: relative; }
+    .feature-num { font-family: var(--mono); color: var(--lime); font-size: .78rem; letter-spacing: .18em; }
+    .feature-body h3 { font-family: var(--display); font-weight: 600; font-size: clamp(1.6rem, 2.6vw, 2.3rem); text-transform: uppercase; line-height: 1.05; }
+    .feature-body p { color: var(--muted); font-size: .98rem; max-width: 46ch; }
+    .feature-link { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); margin-top: 8px; }
+    .feature-link i { font-style: normal; transition: transform .3s var(--ease); }
+    .feature:hover .feature-link i { transform: translate(4px, -4px); }
+    .feature:hover .feature-link { color: var(--lime); }
+    @media (max-width: 860px) {
+      .feature, .feature:nth-child(even) { grid-template-columns: 1fr; }
+      .feature:nth-child(even) .feature-media { order: 0; }
+      .feature-media { min-height: 240px; }
+      .feature-body { padding: 30px; }
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--line-strong); padding: 5px 12px; border-radius: 99px;
+    }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 72px 0 36px; }
+    .filter-btn {
+      font-family: var(--mono); font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--line-strong); border-radius: 99px; padding: 10px 20px;
+      transition: all .25s var(--ease);
+    }
+    .filter-btn:hover { color: var(--ink); border-color: var(--ink); }
+    .filter-btn.active { background: var(--lime); color: #000; border-color: var(--lime); }
+    .filter-btn b { font-weight: 400; opacity: .55; margin-left: 6px; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    @media (max-width: 980px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+      overflow: hidden; display: flex; flex-direction: column;
+      transition: transform .35s var(--ease), border-color .35s;
+      animation: cardIn .45s var(--ease);
+    }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(16px) scale(.98); } }
+    .card::before {
+      content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .35s;
+      background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(214, 255, 63, .1), transparent 65%);
+    }
+    .card:hover { transform: translateY(-6px); border-color: rgba(214, 255, 63, .35); }
+    .card:hover::before { opacity: 1; }
+    .card.hide { display: none; }
+    .card-thumb { aspect-ratio: 16 / 10; overflow: hidden; background: #0a0c10; }
+    .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .55s var(--ease); }
+    .card:hover .card-thumb img { transform: scale(1.06); }
+    .card-body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; position: relative; z-index: 2; }
+    .card-body h3 { font-family: var(--display); font-weight: 600; font-size: 1.12rem; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .card-body h3 i { font-style: normal; color: var(--lime); opacity: 0; transform: translate(-6px, 6px); transition: .3s var(--ease); font-size: .95rem; }
+    .card:hover .card-body h3 i { opacity: 1; transform: none; }
+    .card-body p { color: var(--muted); font-size: .88rem; flex: 1; }
+
+    .work-foot { display: flex; gap: 14px; justify-content: center; margin-top: 56px; flex-wrap: wrap; }
+
+    /* ================= EXPERIENCE ================= */
+    .exp-group { margin-bottom: 56px; }
+    .exp-group:last-child { margin-bottom: 0; }
+    .exp-label { font-family: var(--mono); font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--lime); margin-bottom: 8px; }
+    .exp-row {
+      display: grid; grid-template-columns: 180px 1fr auto; gap: 20px; align-items: center;
+      padding: 26px 18px; border-top: 1px solid var(--line);
+      transition: background .3s, padding-left .3s var(--ease);
+      position: relative;
+    }
+    .exp-group .exp-row:last-child { border-bottom: 1px solid var(--line); }
+    .exp-row:hover { background: rgba(255, 255, 255, .025); padding-left: 30px; }
+    .exp-row::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+      background: var(--grad); transform: scaleY(0); transition: transform .35s var(--ease);
+    }
+    .exp-row:hover::before { transform: none; }
+    .exp-date { font-family: var(--mono); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .exp-main h3 { font-family: var(--display); font-weight: 600; font-size: 1.35rem; line-height: 1.2; }
+    .exp-main h3 small { display: block; font-family: var(--body); font-weight: 500; font-size: .85rem; color: var(--lime); margin-top: 2px; }
+    .exp-main p { color: var(--muted); font-size: .9rem; margin-top: 8px; max-width: 62ch; }
+    .exp-tag { font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 99px; padding: 6px 14px; white-space: nowrap; }
+    @media (max-width: 780px) {
+      .exp-row { grid-template-columns: 1fr; gap: 8px; }
+      .exp-tag { justify-self: start; }
+    }
+
+    /* ================= SKILLS ================= */
+    #skills { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-bottom: 0; }
+    #skills .sec-head { margin-bottom: 40px; }
+    .skill-belt { border-top: 1px solid var(--line); padding: 26px 0; overflow: hidden; }
+    .skill-belt:last-child { border-bottom: 0; }
+    .skill-belt .marquee-track { animation-duration: 40s; }
+    .skill-chip {
+      display: inline-flex; align-items: center; gap: 14px; margin-right: 14px;
+      font-family: var(--display); font-weight: 500; font-size: clamp(1.3rem, 2.6vw, 2rem);
+      color: var(--muted); text-transform: uppercase; white-space: nowrap;
+      border: 1px solid var(--line); border-radius: 99px; padding: 12px 30px;
+      transition: color .3s, border-color .3s;
+    }
+    .skill-chip:hover { color: var(--lime); border-color: var(--lime); }
+    .skill-chip i { font-style: normal; font-size: .9rem; color: var(--lime); }
+
+    /* ================= EDUCATION ================= */
+    .edu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    @media (max-width: 980px) { .edu-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) { .edu-grid { grid-template-columns: 1fr; } }
+    .edu-card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 24px;
+      display: flex; flex-direction: column; gap: 10px; transition: transform .3s var(--ease), border-color .3s;
+    }
+    .edu-card:hover { transform: translateY(-5px); border-color: var(--line-strong); }
+    .edu-card .mono { color: var(--lime); }
+    .edu-card h3 { font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.3; }
+    .edu-card p { color: var(--muted); font-size: .84rem; }
+
+    /* ================= HIGHLIGHTS ================= */
+    .spotlight {
+      display: grid; grid-template-columns: 1fr 1.15fr; border: 1px solid var(--line); border-radius: 24px;
+      overflow: hidden; background: var(--card); margin-bottom: 22px;
+    }
+    .spotlight img { width: 100%; height: 100%; object-fit: cover; min-height: 300px; }
+    .spotlight-body { padding: 44px; display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+    .spotlight-body h3 { font-family: var(--display); font-weight: 600; font-size: clamp(1.5rem, 2.4vw, 2.1rem); text-transform: uppercase; line-height: 1.1; }
+    .spotlight-body p { color: var(--muted); }
+    @media (max-width: 780px) { .spotlight { grid-template-columns: 1fr; } .spotlight-body { padding: 30px; } }
+
+    .media-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    @media (max-width: 780px) { .media-grid { grid-template-columns: 1fr; } }
+    .media-card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+    .media-card video, .media-card iframe { width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; background: #000; }
+    .media-card figcaption { padding: 16px 22px; font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+    /* ================= CONTACT ================= */
+    #contact { overflow: hidden; }
+    .contact-inner { text-align: center; position: relative; }
+    .contact-kicker { margin-bottom: 26px; color: var(--muted); }
+    .contact-title {
+      font-family: var(--display); font-weight: 700; text-transform: uppercase;
+      font-size: clamp(2.6rem, 9vw, 7.6rem); line-height: .98; letter-spacing: -.015em;
+    }
+    .contact-title .stroke { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+    .contact-title a { position: relative; display: inline-block; transition: color .3s; }
+    .contact-title a:hover {
+      background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+      -webkit-text-stroke: 0;
+    }
+    .contact-sub { color: var(--muted); max-width: 520px; margin: 30px auto 44px; }
+    .contact-actions { display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .big-circle {
+      width: 168px; height: 168px; border-radius: 50%; background: var(--lime); color: #000;
+      display: inline-flex; align-items: center; justify-content: center; text-align: center;
+      font-family: var(--mono); font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 500;
+      transition: transform .3s var(--ease), box-shadow .3s; will-change: transform;
+      margin: 0 10px;
+    }
+    .big-circle:hover { box-shadow: 0 0 60px rgba(214, 255, 63, .45); }
+    .contact-orbit { position: absolute; inset: 0; pointer-events: none; }
+
+    /* ================= FOOTER ================= */
+    footer { border-top: 1px solid var(--line); background: var(--bg-2); padding: 72px 0 36px; }
+    .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 64px; }
+    @media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 540px) { .foot-grid { grid-template-columns: 1fr; } }
+    .foot-brand h3 { font-family: var(--display); font-weight: 700; font-size: 1.6rem; margin-bottom: 12px; }
+    .foot-brand p { color: var(--muted); font-size: .92rem; max-width: 34ch; }
+    .foot-brand img { width: 92px; margin-top: 22px; }
+    .foot-col h4 { font-family: var(--mono); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--lime); margin-bottom: 18px; }
+    .foot-col ul { list-style: none; display: grid; gap: 10px; }
+    .foot-col a { color: var(--muted); font-size: .92rem; transition: color .2s, padding-left .25s var(--ease); }
+    .foot-col a:hover { color: var(--ink); padding-left: 6px; }
+    .foot-bar {
+      border-top: 1px solid var(--line); padding-top: 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    }
+    .foot-bar .time { color: var(--ink); }
+    .back-top { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); transition: color .2s; }
+    .back-top:hover { color: var(--lime); }
+
+    /* ================= MOTION SAFETY ================= */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      html.js .reveal { opacity: 1; transform: none; }
+      .hero h1 .line-inner { transform: none !important; }
+      .marquee-track { animation: none; }
+      body::after { display: none; }
+    }
+  </style>
 </head>
 
 <body>
-
-<!-- Add your content of header -->
-
-<div class="navbar navbar-default">
-	    	<div class="container-fluid">
-	    		<div class="navbar-header">
-	    			 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapibleMenu">
-				        <span class="icon-bar"></span>
-				        <span class="icon-bar"></span>
-				        <span class="icon-bar"></span>
-				      </button>
-	    			<a href="#" class="navbar-brand">Portfolio</a>
-	    		</div>
-	    		<div class="collapse navbar-collapse" id="collapibleMenu">
-	    			<ul class="nav navbar-nav navbar-right">
-				        <li><a href="./index.html">Home</a></li>
-				        <li><a href="https://github.com/akshaybhopani">GitHub</a></li>
-                <li><a href="https://drive.google.com/drive/folders/0B3Pn0cesvTyndGFGRk9oSGdmbjQ?usp=sharing">Certificates</a></li>
-				        <li><a href="https://drive.google.com/file/d/12Txj0Zhu_L0Ojaj7IKcI2AB57KR8yB6u/view?usp=sharing">Resume</a></li>
-				        <li><a href="https://www.yourtechshow.com">Website</a></li>
-				    </ul>
-	    		</div>
-	    	</div>
-	    </div>
-
-
-
-			<!-- Place this tag in your head or just before your close body tag. -->
-			<script async defer src="https://buttons.github.io/buttons.js"></script>
-
-
-<div class="background-color-layer" style="background-image: url('assets/images/Youtuber.jpg')"
-></div>
-<main class="content-wrapper">
-  <header class="white-text-container section-container">
-    <div class="text-center">
-      <h1>Hello World. This is Akshay Bhopani</h1>
-      <p>Senior Web Engineer, Tech Content Creator & AI Enthusiast</p>
-      <p>
-        <a class="fa-icon fa-icon-2x" href="https://facebook.com/akshaybhopani" title="">
-          <i class="fa fa-facebook"></i>
-        </a>
-        <a class="fa-icon fa-icon-2x" href="https://twitter.com/akshaybhopani" title="">
-          <i class="fa fa-twitter"></i>
-        </a>
-        <a class="fa-icon fa-icon-2x" href="https://www.yourtechshow.com" title="">
-          <i class="fa fa-dribbble"></i>
-        </a>
-        <a class="fa-icon fa-icon-2x" href="https://www.linkedin.com/in/akshaybhopani/" title="">
-          <i class="fa fa-linkedin"></i>
-        </a>
-        <a class="fa-icon fa-icon-2x" href="https://youtube.com/akshaybhopani" title="">
-          <i class="fa fa-youtube"></i>
-        </a>
-      </p>
-    </div>
-  </header>
-</main>
-
-
-<!-- Add your site or app content here -->
-
- <div class="container">
-   <div class="row">
-     <div class="col-xs-12">
-
-        <div class="card">
-          <div class="card-block">
-            <h2>About me</h2>
-            <div class="row">
-              <div class="col-md-4 profile-image">
-                <p><img  style="border-radius: 450px;" src="./assets/images/Akshay's Profile 2025.jpg" class="img-responsive" alt="Akshay Bhopani - Senior Web Developer and Tech Content Creator" loading="lazy"></p>
-              </div>
-              <div class="col-md-8">
-              <p align='justify'>Full-stack maestro and tech storyteller, Akshay Bhopani is the <b>engineer-turned-web-dev</b> dynamo who crafts <b>digital magic</b>. From building <b>sleek websites</b> to spinning tales on YouTube, blogs, and beyond, he’s a <b>content creator</b> with a knack for innovation. With roots in electronics and network engineering, Akshay now <b>architects code</b>, <b>conquers challenges</b>, and shares his <b>journey</b>—one pixel, post, and project at a time.</p>
-							<p align='justify' style="font-style: italic;">Empowering Businesses Through Web Innovation</p>
-              <a href="https://youtube.com/akshaybhopani" class="social-round-icon fa-icon">
-                    <i class="fa fa-youtube"></i></a> 
-               <a href="https://www.linkedin.com/in/akshaybhopani/" class="social-round-icon fa-icon">
-                    <i class="fa fa-linkedin"></i>
-                  </a>
-                  <a href="https://github.com/AKSHAYBHOPANI" class="social-round-icon fa-icon">
-                    <i class="fa fa-github"></i>
-                  </a>
-                  <a href="https://www.quora.com/profile/Akshay-Bhopani" class="social-round-icon fa-icon">
-                    <i class="fa fa-quora"></i>
-                  </a>
-                  <a href="https://akshaybhopani.medium.com/" class="social-round-icon fa-icon">
-                    <i class="fa fa-medium"></i>
-                  </a>
-							</div>
-            </div>
-          </div>
-        </div>
-
-<div class="card">
-          <div class="card-block">
-            <h2>Freelancing Projects</h2>
-            <div class="row">
-              
-              <div class="col-md-4">
-                <a href="https://yourtechshow.com" >
-                <img src="./assets/images/Services.png" class="img-responsive" alt="Tech Services - AI Guide powered by Gemini 2.0 Flash" loading="lazy">
-                <h3 class="h5">Services</h3>
-                <p>Beautiful minimal design, AI Guide powered by Gemini 2.0 Flash, Pro Membership for priority support and extra perks built with Stripe and Firebase. Built on Next JS and hosted on Namecheap Linux Server.</p>
-              </div>
-              <div class="col-md-4">
-                <a href="./assets/images/Shilpwellness.png">
-                <img src="./assets/images/Shilpwellness.png" class="img-responsive" alt="Shilpwellness - Luxury Hammam and Spa Website" loading="lazy">
-                <h3 class="h5">Shilpwellness</h3>
-                <p>A luxury Hammam and spa for the alignment of your mind, body, and soul. Designed by Confluence-r, Developed and Consulted by Ave. Built on Next JS with Tailwind CSS and Custom Dashboard.</p>
-              </div>
-               <div class="col-md-4">
-        <a href="./assets/images/api_tester.png">
-        <img src="./assets/images/api_tester.png"  class="img-responsive" alt="API Tester - Multi-Environment API Testing Tool" loading="lazy">
-        <h3 class="h5">API Tester</h3>
-        <p>Test API's on multiple Environments and generate full reports with ease. Download in Excel and get downtime monitoring on Email. Developed for IPRU and Consulted by DePronto Infotech.</p>
-              </a>
-              </div>
-              </div>
-            <div class="row">
-              
-              <div class="col-md-4">
-                <a href="https://www.dcikigai.com" >
-                <img src="./assets/images/dcipl.png" class="img-responsive" alt="">
-                <h3 class="h5">DCIPL</h3>
-                <p>DCIPL is a Personal Finance Planning System Developed For DC & CO is based on React and uses complex PnC Linking.</p>
-              </div>
-              <div class="col-md-4">
-                <a href="https://xtremepc.ml" >
-                <img src="./assets/images/xtreme-pc.png" class="img-responsive" alt="">
-                <h3 class="h5">Xtreme PC</h3>
-                <p>Xtreme PC is a Computer Store Developed For CM Computers is based on Wordpress with Woo-Commerce integration</p>
-              </div>
-               <div class="col-md-4">
-        <a href="https://akshaybhopani.github.io/Ent-Portal/" >
-        <img src="./assets/images/img-10.jpg"  class="img-responsive" alt="">
-        <h3 class="h5">Enterprise Portal</h3>
-        <p>A local deployed portal with all documents you need in a central repository, Useful tools and shared updated experiences among everyone.</p>
-              </a>
-              </div>
-              </div>
-             <div class="row">
-         <div class="col-md-4">
-        <a href="https://sandhyakundnani.com" >
-        <img src="./assets/images/Sandhya-Kundnani.png"  class="img-responsive" alt="">
-        <h3 class="h5">Dr. Sandhya Kundnani's Website</h3>
-        <p>Personal Website for Dr. Sandhya Kundnani. Based on Wordpress with Classic Design and Better Content Management.</p>
-              </a>
-              </div>
-            <div class="col-md-4">
-      <a href="https://thekdi123.github.io/Niyati-Portfolio/" >
-      <img src="./assets/images/Niyati-Thekdi.png"  class="img-responsive" alt="">
-      <h3 class="h5">Niyati Thekdi's Portfolio</h3>
-      <p>Personal Portfolio Website For Niyati Thekdi. Based on Bootstrap 4 and uses Paper Kit 2 UI Kit as a base theme.</p>
-            </a>
-            </div>
-              
-          </div> 
-          <br>
-          <!-- Place this tag where you want the button to render. -->
-          <a class="github-button" href="https://github.com/akshaybhopani" data-color-scheme="no-preference: dark; light: dark; dark: dark;" data-size="large" aria-label="Visit @akshaybhopani on GitHub">View Code On GitHub</a>
-          </div>
-</a></div></a></div></div>
-<div class="card">
-          <div class="card-block">
-            <h2>Projects For Confluence-r</h2>
-
-            <div class="row">
-              <div class="col-md-4">
-                <a href="https://cbhogilal.in" >
-                <img src="./assets/images/cbc.png" class="img-responsive" alt="">
-                <h3 class="h5">C Bhogilal & Co</h3>
-                <p>Since 1914, C Bhogilal & Co. Fort (CBC) has helped create spaces that have ensured a luxurious start every morning.</p></a>
-              </div>
-              <div class="col-md-4">
-                <a href="https://dynamatics.com" >
-                <img src="./assets/images/dynamatics.png" class="img-responsive" alt="">
-                <h3 class="h5">Dynamatics Technology</h3>
-                <p>DYNAMATIC TECHNOLOGIES LIMITED designs and builds highly engineered products for Automotive, Aeronautic, Hydraulic and Security applications.</p></a>
-              </div>
-               <div class="col-md-4">
-        <a href="https://www.panandthedream.com/" >
-        <img src="./assets/images/pan-and-dream.png"  class="img-responsive" alt="">
-        <h3 class="h5">Pan & The Dreams</h3>
-        <p>PAN is an ART and STYLE print magazine that invites ARTISTS, WRITERS and PHOTOGRAPHERS to share their views on a chosen subject.</p>
-              </a>
-              </div>
-            </div>
-              <div class="row">
-              <div class="col-md-4">
-                <a href="https://confluence-r.com" >
-                <img src="./assets/images/Confluence-r.png" class="img-responsive" alt="">
-                <h3 class="h5">Confluence-r</h3>
-                <p>Features include SERP Analysis, Automatic Light/Dark Mode, and Responsive Design. Build on Next Js and deployed on Vercel for Static Generation (SSG), Webp Image Compression, CSS Modules, and more.</p>
-                 </a>
-              </div>
-
-             
-              <div class="col-md-4">
-                <a href="https://aasthafoundations.com/" >
-                <img src="./assets/images/aastha.png" class="img-responsive" alt="">
-                <h3 class="h5">Aastha</h3>
-                <p>Aastha is the platform through which, in these trying times, we are able to bring community online and make it easier for the children to access information, activities, and funds to which they otherwise have very little access to.</p>
-                 </a>
-              </div>
-
-              
-              </div>
-             
-         <p><a href="https://yourtechshow.com/develop" class="btn btn-primary">Learn More </a></p>
-          </div>
-</a></div>
-        <div class="card">
-          <div class="card-block">
-            <h2>Fun Coding Projects</h2>
-            <div class="row">
-              <div class="col-md-4">
-                <a href="https://akshaybhopani.github.io/facerecognition/" >
-                <img src="./assets/images/img-02.jpg" class="img-responsive" alt="">
-                <h3 class="h5">Face Recognition</h3>
-                <p>Face Recognition App is built on React and detects faces in your photos using Clarifai ML API.</p>
-              </div>
-              <div class="col-md-4">
-                <a href="https://akshaybhopani.github.io/POCO/" >
-                <img src="./assets/images/img-03.jpg" class="img-responsive" alt="">
-                <h3 class="h5">Startup Landing Page</h3>
-                <p>POCO is all about making powerful smartphones with technologies that truly matter.</p>
-              </div>
-              <div class="col-md-4">
-                <a href="https://akshaybhopani.github.io/RoboFriends/" >
-                <img src="./assets/images/img-04.jpg"  class="img-responsive" alt="">
-                <h3 class="h5">Robo Friends</h3>
-                <p>RoboFriends App is built on React and helps you find Name, E-Mail and Profile Picture of Funny Robots using RoboHash API.</p>
-                </a>
-              </div>
-              </div>
-              <div class="row">
-         <div class="col-md-4">
-        <a href="https://akshaybhopani.github.io/JokeTeller/" >
-        <img src="./assets/images/joke-teller.png"  class="img-responsive" alt="">
-        <h3 class="h5">Joke Teller</h3>
-        <p>Read and Listen to Programming Jokes. JokeTeller uses fetch() method to get Jokes from JokesAPI and plays the Jokes in audio form via Voice RSS TTS SDK.</p>
-              </a>
-              </div>
-            <div class="col-md-4">
-			<a href="https://minecraft.yourtechshow.com" >
-			<img src="./assets/images/img-13.png"  class="img-responsive" alt="">
-			<h3 class="h5">Minecraft Bedrock Server</h3>
-			<p>A Fun Minecraft Bedrock Server Hosted On Google Cloud Platform With Beautiful Invite Page.</p>
-            </a>
-            </div>
-              <div class="col-md-4">
-        <a href="https://akshaybhopani.github.io/PIP/" >
-        <img src="./assets/images/pip.png"  class="img-responsive" alt="">
-        <h3 class="h5">Picture In Picture</h3>
-        <p>Picture In Picture Any Screen. It uses Browser's getDisplayMedia Method to capture the screen and then request Picture In Picture Feed.</p>
-              </a>
-              </div>
-          </div> 
-          <br>
-          <!-- Place this tag where you want the button to render. -->
-					<a class="github-button" href="https://github.com/akshaybhopani" data-color-scheme="no-preference: dark; light: dark; dark: dark;" data-size="large" aria-label="Visit @akshaybhopani on GitHub">View Code On GitHub</a>
-          </div>
-</a></div>
-        <div class="card">
-          <div class="card-block">
-            <h2>Work</h2>
-						
-	          <h3 style="color:red";>Jobs</h3>
-            <br>
-            <div class="work-experience">
-              <small class="date">2021 - Present</small>
-              <h3 class="h5 date-title">Senior Software Developer - DePronto Infotech</h3>
-
-              <p>Senior Front End Developer working on React JS & jQuery For DePronto Infotech Client's Websites especially in BFSI Segment.</p>
-            </div>
-
-            <div class="work-experience">
-              <small class="date">1st August 2020 - Present </small>
-              <h3 class="h5 date-title">Website Designer and Developer - Confluence-r </h3>
-
-
-              <p>Front End Web Developer and Designer for Confluence-r clients website. Managing Linux Hosting and Making SEO friendly Websites for SMB's</p>
-            </div>
-
-						<div class="work-experience">
-							<small class="date">22nd July 2019 - 24th July 2020 </small>
-							<h3 class="h5 date-title">Network Support Engineer - Orient Technologies Pvt Ltd </h3>
-
-
-							<p>Fault Finding, Troubleshooting, and Configuring Tikona Fibre-To-RF Digital Network. Operating and Monitoring Cambium, Ligo Wave, TP-Link Pharos Radios, and TP-Link, Mogralite Switches.</p>
-						</div>
-
-            
-
-<h3 style="color:red";>Part Time</h3>
-            <br>
-            <div class="work-experience">
-              <small class="date">Jul 2023 - Present · 1 yr 9 mos</small>
-              <h3 class="h5 date-title">Community Lead - Code Vipassana</h3>
-              <p>Empowering the Developer community to learn, build and explore Google Cloud Products in association with developer experts at Google.</p>
-            </div>
- <div class="work-experience">
-              <small class="date">Jul 2016 - Feb 2017 · 8 mos </small>
-              <h3 class="h5 date-title">Moderator Mi Community India - Xiaomi Technology </h3>
-
-
-              <p>I love Xiaomi Products and help Xiaomi users to solve their tech problems in Mi Community. Mi community is a home for Indian Mi Fans.</p>
-            </div>
-            <div class="work-experience">
-              <small class="date">10th April 2021 - August 2021 . 5 Months </small>
-              <h3 class="h5 date-title">Tech Lead - DC & CO </h3>
-
-
-              <p>Tech Lead For Front End & Back End Web Development Team. Working on Building Personal Finance Management System For DCIPL, a new venture by DC Ikigai Private Limited.</p>
-            </div>
-
-            <div class="work-experience">
-              <small class="date">Since 2015 - Present </small>
-              <h3 class="h5 date-title">Founder, Editor and Writer - The Tech Show Media Group </h3>
-
-
-              <p>Simplifying Technology life for people, Creating Assembling, Upgrading, Unboxing and Reviews videos and articles.</p>
-            </div>
-
-<h3 style="color:red" >Internships</h3>
-            <br>
-            <div class="work-experience">
-              <small class="date">13 May - 03 June 2013 </small>
-              <h3 class="h5 date-title">Former Trainer - Raychem RPG Pvt Ltd </h3>
-
-
-              <p>Learner for Cathodic Protection Technique and Rectifier Manufacturing.</p>
-            </div>
-
-            <div class="work-experience">
-              <small class="date">23 May - 30 June 2016 </small>
-              <h3 class="h5 date-title">Software Trainer - Vedang Radio Technology Pvt Ltd </h3>
-
-
-              <p>Learner for Atmel and ST boards programming and setup.</p>
-            </div>
-
-            <div class="work-experience">
-              <small class="date">27 June - 7 July 2017 </small>
-              <h3 class="h5 date-title">Former Trainer - Central Railway </h3>
-
-
-              <p>Learner for telecomm department of Indian railways. Learned basic signal and Railnet.</p>
-            </div>
-
-            <div class="work-experience">
-              <small class="date">18 June - 21 July 2018 </small>
-              <h3 class="h5 date-title">Digital Champion - Reliance Jio Infocomm Pvt Ltd </h3>
-
-
-              <p>Trainer to empowering India SMBs to Worlds largest data network and business solutions. Won silver certification.</p>
-            </div>
-
-          </div>
-        </div>
-
-
-        <div class="card">
-          <div class="card-block">
-            <h2>Education</h2>
-            <div class="row">
-              <div class="col-md-4">
-
-                <div class="education-experience">
-                  <small class="date">2016-2019</small>
-                  <h3 class="h5 date-title">B.E | Electronics And Telecommunication</h3>
-                  <p>VIVEKANAND EDUCATION SOCIETY INSTITUTE OF TECHNOLOGY</p>
-                </div><br>
-								<div class="education-experience">
-									<small class="date">2019-Present</small>
-									<h3 class="h5 date-title"> Online Learning | Coding and Computer Science</h3>
-									<p>ZERO TO MASTERY ACADEMY</p>
-								</div>
-
-              </div>
-              <div class="col-md-4">
-                <div class="education-experience">
-                  <small class="date">2014-2016</small>
-                  <h3 class="h5 date-title">Diploma | Electronics And Telecommunication</h3>
-                  <p>VIVEKANAND EDUCATION SOCIETY POLYTECHNIC</p>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="education-experience">
-                  <small class="date">2012-2014</small>
-                  <h3 class="h5 date-title">H.S.C Vocational | Electronics Technology</h3>
-                  <p>N.ES VOCATIONAL JUNIOR COLLEGE</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-          <div class="card">
-            <div class="card-block">
-              <h2>Skills</h2>
-              <div class="col-md-6">
-                <h3 class="template-title-example">Programming</h3>
-                <ul>
-                  <li>React Js</li>
-                  <li>Next Js</li>
-                  <li>Express Js</li>
-                  <li>Node Js</li>
-                  <li>Liquid</li>
-                  <li>Postgres SQL</li>
-                  <li>JavaScript</li>
-                  <li>HTML5</li>
-                  <li>CSS3</li>
-                </ul>
-              </div>
-
-              <div class="col-md-6">
-                <h3 class="template-title-example">CMS Software</h3>
-                <ul>
-                  <li>Google Cloud Platform</li>
-                  <li>CPanel</li>
-                  <li>Wordpress</li>
-                  <li>Woo-Commerce</li>
-                  <li>Shopify</li>
-                  <li>PHPbb</li>
-                  <li>FreeNAS</li>
-                  <li>CnMaestro</li>
-                  <li>Siebel 8.1</li>
-                  <li>ZenDesk</li>
-                </ul>
-              </div>
-
-
-                <h3 class="template-title-example">Hardware</h3>
-                <ul>
-                  <li>PCB Designing (Layer 1)</li>
-                  <li>PCB Soldering (THT)</li>
-                  <li>Circuit Troubleshooting (SMD & THT)</li>
-                  <li>Linux Server Setup & IAM</li>
-                  <li>NAS Setup</li>
-                  <li>PC Assembling</li>
-                  <li>Crypto Mining</li>
-                  <li>Router and Switch Setup and Management</li>
-                </ul>
-              </div>
-          </div></a>
-
-
-				<div class="card">
-					<div class="card-block">
-						<h2>Hardware Projects</h2>
-						<div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
-						<!-- Wrapper for slides -->
-						<div class="carousel-inner" role="listbox">
-							<div class="item active">
-								<center>
-								<img src="./assets/images/img-06.jpg" class="img-responsive" alt="..." height="400px" width="600px">
-								<div class="carousel-caption">
-									<h3 class="h5"> H.E.V System </h3>
-									<p>2019</p>
-                  <a class="btn btn-primary btn-sm" href="https://drive.google.com/file/d/1ajTq4yKCmV9d4SZS4vGXhlriVXbPIMap/view?usp=sharing"> Read Paper </a>
-								</div>
-							</div>
-							<div class="item">
-								<center>
-								<img src="./assets/images/img-08.jpg" class="img-responsive" alt="..." height="400px" width="600px">
-								<div class="carousel-caption">
-									<h3 class="h5">IR Security Control System</h3>
-									<p>2016</p>
-                  <a class="btn btn-primary btn-sm" href="https://drive.google.com/file/d/0B3Pn0cesvTynSmptVUNoYklncmc/view?usp=sharing"> Watch Presentation </a>
-								</div>
-							</div>
-						</div>
-
-						<!-- Controls -->
-						<a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
-							<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-							<span class="sr-only">Previous</span>
-						</a>
-						<a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
-							<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-							<span class="sr-only">Next</span>
-						</a>
-
-						<!-- Indicators -->
-						<ol class="carousel-indicators">
-							<li data-target="#carousel-example-generic2" data-slide-to="0" class="active"></li>
-							<li data-target="#carousel-example-generic2" data-slide-to="1"></li>
-						</ol>
-						</div>
-					</div>
-				</div>
-
-        <div class="card">
-          <div class="card-block">
-            <h2>Blog Projects</h2>
-            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-            <!-- Wrapper for slides -->
-						<div class="carousel-inner" role="listbox">
-							<div class="item active">
-								<center>
-								<img src="./assets/images/img-11.png" class="img-responsive" alt="...">
-								<div class="carousel-caption">
-									<h3 class="h5">Tech Store</h3>
-									<p>2020</p>
-									<a class="btn btn-primary btn-sm" href="https://store.yourtechshow.com"> Visit WordPress Store </a>
-								</div>
-							</div>
-							<div class="item">
-								<center>
-                <img src="./assets/images/img-12.png" class="img-responsive" alt="...">
-                <div class="carousel-caption">
-                  <h3 class="h5">The Tech Show Forum</h3>
-                  <p>2020</p>
-                  <a class="btn btn-primary btn-sm" href="https://forum.yourtechshow.com"> Visit PhpBB Forum </a>
-                </div>
-              </div>
-							<div class="item">
-								<center>
-                <img src="./assets/images/img-05.jpg" class="img-responsive" alt="...">
-                <div class="carousel-caption">
-                  <h3 class="h5">The Tech Show Downloads</h3>
-                  <p>2019</p>
-                  <a class="btn btn-primary btn-sm" href="https://downloads.yourtechshow.com"> Visit Blogger Site </a>
-                </div>
-              </div>
-              <div class="item">
-								<center>
-                <img src="./assets/images/music-player.png" class="img-responsive" alt="...">
-                <div class="carousel-caption">
-                  <h3 class="h5">Saregama Caarvan Music Player</h3>
-                  <p>2021</p>
-                  <a class="btn btn-primary btn-sm" href="https://saregamacarvaansongs.xyz"> Visit Website </a>
-                  <a class="btn btn-primary btn-sm" href="https://chrome.google.com/webstore/detail/saregama-carvaan-songs-ex/dbaieelgmogdchkmpighcfejjcalgkmc?hl=en"> Chrome Extension </a>
-                </div>
-              </div>
-            </div>
-
-            <!-- Controls -->
-            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-              <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-              <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-              <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-              <li data-target="#carousel-example-generic" data-slide-to="3"></li>
-            </ol>
-          </div>
-        </div>
-      </div>
-
-
-        <div class="card">
-          <div class="card-block">
-            <h2>Social Network</h2>
-            <div class="row">
-              <div class="col-md-6">
-                <p class="social-buttons social-twitter">
-                  <a href="https://twitter.com/akshaybhopani" title="Twitter">
-                    <span class="social-round-icon">
-                      <i class="fa fa-twitter"></i>
-                    </span>
-                    @AKSHAYBHOPANI
-                  </a>
-                </p>
-                <p class="social-buttons social-linkedin">
-                  <a href="https://www.linkedin.com/in/akshaybhopani/" title="LinkedIn">
-                    <span class="social-round-icon">
-                      <i class="fa fa-linkedin"></i>
-                    </span>
-                    AKSHAY BHOPANI
-                  </a>
-                </p>
-              </div>
-              <div class="col-md-6">
-                <p class="social-buttons social-facebook">
-                  <a href="https://facebook.com/akshaybhopani" title="Facebook">
-                    <span class="social-round-icon">
-                      <i class="fa fa-facebook"></i>
-                    </span>
-                    Akshay Bhopani
-                  </a>
-                </p>
-                <p class="social-buttons social-telegram">
-                  <a href="https://t.me/akshaybhopani" title="Telegram">
-                    <span class="social-round-icon">
-                      <i class="fa fa-telegram"></i>
-                    </span>
-                    @akshaybhopani
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-block">
-            <h2>Highlights</h2>
-            <div class="row">
-						<center>
-            <h2 style="color:red">Interview</h2>
-
-            <a href="https://in.c.mi.com/thread-54296-1-1.html">
-              <img src="./assets/images/img-09.jpg" class="img-responsive"></a>
-							<br>
-							<a class="btn btn-primary" href="https://in.c.mi.com/thread-54296-1-1.html">Read Interview On Mi Community</a>
-            </center>
-              <div class="row">
-                <center>
-                <h2 style="color:red">Featured Tweet</h2>
-                <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Here&#39;s a good tutorial for deploying a React JS app to a serverless environment.<br><br>It shows off <a href="https://twitter.com/googlecloud?ref_src=twsrc%5Etfw">@googlecloud</a> Firestore, Cloud Run, and more.<a href="https://t.co/RhEVPr1IaF">https://t.co/RhEVPr1IaF</a></p>&mdash; Richard Seroter (@rseroter) <a href="https://twitter.com/rseroter/status/1712570081904144458?ref_src=twsrc%5Etfw">October 12, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-                </center>
-                </div>
-						<center><br>
-               <h2 style="color:red">Commercial Videos</h2> </center>
-
-               <video src="./assets/Videos/Confluence-r Color Update.mp4" width="100%" height="100%" controls=""></video>
-
-               <iframe width="100%" height="415" src="https://www.youtube.com/embed/BaSdo3VfLd8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<br>
-               <video width="100%" height="415" src="./assets/Videos/The Tech Show March 2025 Launch.mov" title="YouTube video player" controls=""></video>
-<br>
-						</div>
-          </div>
-        </div>
-
-
-        <div class="card">
-          <div class="card-block">
-            <h2>Let's Connect</h2>
-            <div class="cta-container">
-              <a href="https://www.linkedin.com/in/akshaybhopani/" class="cta-button cta-linkedin">
-                <i class="fa fa-linkedin"></i>
-                Connect on LinkedIn
-              </a>
-              <a href="https://yourtechshow.com/call" class="cta-button cta-call">
-                <i class="fa fa-calendar"></i>
-                Book a Call
-              </a>
-              <a href="https://yourtechshow.com/develop" class="cta-button cta-business">
-                <i class="fa fa-briefcase"></i>
-                Talk Business
-              </a>
-            </div>
-          </div>
-        </div>
-     </div>
-   </div>
- </div>
-
-</main>
-<footer class="footer-container white-text-container text-center" role="contentinfo">
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12">
-        <p><a href="https://www.yourtechshow.com" aria-label="Visit The Tech Show"> 
-          <img width="100px" src="./assets/images/logo.png" alt="The Tech Show Logo">
-        </a></p>
-        <p>© <time datetime="2024">2025</time> Made with 💛 by 
-          <a href="https://akshaybhopani.github.io/portfolio" title="Get to know Akshay Bhopani" rel="author">Akshay Bhopani</a>
-        </p>
-      </div>
+  <script>document.documentElement.classList.add("js");</script>
+
+  <!-- preloader -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <div class="preloader-name"><span>AKSHAY&nbsp;BHOPANI</span></div>
+      <div class="preloader-count" id="preCount">00</div>
     </div>
   </div>
-</footer>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" defer></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function (event) {
-     scrollRevelation('.card');
-  });
-</script>
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID
 
-<script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date(); a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-XXXXX-X', 'auto');
-  ga('send', 'pageview');
-</script>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
---><script type="text/javascript" src="./main.bc58148c.js" defer></script></body>
+  <!-- ================= NAV ================= -->
+  <nav class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top"><i></i>AKSHAY<span style="color:var(--muted)">.DEV</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#highlights">Highlights</a></li>
+        <li><a href="https://drive.google.com/file/d/12Txj0Zhu_L0Ojaj7IKcI2AB57KR8yB6u/view?usp=sharing" target="_blank" rel="noopener">Resume</a></li>
+        <li><a class="cta" href="#contact">Let's Talk</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <header class="hero" id="top">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="hero-grid-lines"></div>
+
+    <div class="wrap hero-inner">
+      <div class="hero-status reveal">
+        <img src="./assets/images/Akshay's Profile 2025.jpg" alt="Akshay Bhopani">
+        <span class="pulse"></span>
+        <span><b>Available for work</b> — Mumbai, IN</span>
+      </div>
+
+      <h1>
+        <span class="line"><span class="line-inner">Senior Web</span></span>
+        <span class="line"><span class="line-inner"><span class="stroke">Engineer</span> &amp;</span></span>
+        <span class="line"><span class="line-inner"><span class="accent">Storyteller</span></span></span>
+      </h1>
+
+      <div class="hero-sub-row">
+        <div>
+          <p class="hero-role reveal" style="--d:.5s">// I build <span class="scramble" id="scramble">REACT APPS</span><span style="color:var(--lime)">_</span></p>
+          <p class="hero-sub reveal" style="--d:.6s">Crafting fast, SEO-first products with React &amp; Next.js by day — telling the stories behind the tech on YouTube, blogs and beyond by night.</p>
+          <div class="hero-actions reveal" style="--d:.7s">
+            <a class="btn btn-solid magnetic" href="#work"><span>View Selected Work</span></a>
+            <a class="btn btn-line magnetic" href="https://yourtechshow.com/call" target="_blank" rel="noopener">Book a Call ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">Scroll</div>
+
+    <div class="marquee" aria-hidden="true" style="margin-top:64px">
+      <div class="marquee-track">
+        <span class="marquee-item">React <i>◆</i> Next.js <i>◆</i> Node <i>◆</i> Google Cloud <i>◆</i> AI <i>◆</i> WordPress <i>◆</i> SEO <i>◆</i> Content <i>◆</i></span>
+        <span class="marquee-item">React <i>◆</i> Next.js <i>◆</i> Node <i>◆</i> Google Cloud <i>◆</i> AI <i>◆</i> WordPress <i>◆</i> SEO <i>◆</i> Content <i>◆</i></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ================= ABOUT ================= -->
+    <section id="about">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-num">01</span>
+          <h2 class="sec-title">The <em>Human</em> Behind</h2>
+          <p class="sec-side">Engineer-turned-web-dev with roots in electronics &amp; networks — now architecting code and content in equal measure.</p>
+        </div>
+
+        <div class="bento">
+          <div class="b-photo reveal">
+            <img src="./assets/images/Akshay's Profile 2025.jpg" alt="Akshay Bhopani — Senior Web Developer and Tech Content Creator">
+            <figcaption><b>Akshay Bhopani</b>Mumbai · India</figcaption>
+          </div>
+          <div class="b-bio reveal" style="--d:.1s">
+            <p>Full-stack maestro and tech storyteller — the <b>engineer-turned-web-dev</b> dynamo who crafts <b>digital magic</b>. From building <b>sleek websites</b> to spinning tales on YouTube, blogs, and beyond, I'm a <b>content creator</b> with a knack for innovation.</p>
+            <p>With roots in electronics and network engineering, I now <b>architect code</b>, <b>conquer challenges</b>, and share the <b>journey</b> — one pixel, post, and project at a time.</p>
+            <p class="quote">Empowering businesses through web innovation.</p>
+          </div>
+          <div class="b-stat reveal" style="--d:.15s"><strong><span data-count="25">0</span>+</strong><span>Projects shipped</span></div>
+          <div class="b-stat reveal" style="--d:.2s"><strong><span data-count="10">0</span>+</strong><span>Years in tech</span></div>
+          <div class="b-stat reveal" style="--d:.25s"><strong><span data-count="53">0</span>K</strong><span>Monthly content views</span></div>
+          <div class="b-stat reveal" style="--d:.3s"><strong>∞</strong><span>Curiosity for new tech</span></div>
+          <div class="b-now reveal" style="--d:.35s">
+            <h3>// Currently</h3>
+            <ul>
+              <li>Senior Software Developer @ DePronto Infotech</li>
+              <li>Community Lead @ Code Vipassana × Google Cloud</li>
+              <li>Founder @ The Tech Show Media Group</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= WORK ================= -->
+    <section id="work">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-num">02</span>
+          <h2 class="sec-title">Selected <em>Work</em></h2>
+          <p class="sec-side">Freelance builds, agency craft for Confluence-r, and experiments that keep the blade sharp.</p>
+        </div>
+
+        <!-- featured -->
+        <article class="feature reveal tilt">
+          <div class="feature-media"><img src="./assets/images/Services.png" alt="Tech Services — AI Guide powered by Gemini 2.0 Flash" loading="lazy"></div>
+          <div class="feature-body">
+            <span class="feature-num">FEATURED / 01</span>
+            <h3>The Tech Show — Services</h3>
+            <p>Minimal design meets AI: an AI Guide powered by Gemini 2.0 Flash, Pro Membership via Stripe &amp; Firebase, built on Next.js and self-hosted on a Linux server.</p>
+            <div class="tags"><span class="tag">Next.js</span><span class="tag">Gemini 2.0</span><span class="tag">Stripe</span><span class="tag">Firebase</span></div>
+            <a class="feature-link" href="https://yourtechshow.com" target="_blank" rel="noopener">Visit Live Site <i>↗</i></a>
+          </div>
+        </article>
+
+        <article class="feature reveal tilt">
+          <div class="feature-media"><img src="./assets/images/Confluence-r.png" alt="Confluence-r website" loading="lazy"></div>
+          <div class="feature-body">
+            <span class="feature-num">FEATURED / 02</span>
+            <h3>Confluence-r</h3>
+            <p>SERP analysis, automatic light/dark mode, responsive design. Built on Next.js, deployed on Vercel with SSG, WebP compression and CSS Modules.</p>
+            <div class="tags"><span class="tag">Next.js</span><span class="tag">Vercel</span><span class="tag">SSG</span></div>
+            <a class="feature-link" href="https://confluence-r.com" target="_blank" rel="noopener">Visit Live Site <i>↗</i></a>
+          </div>
+        </article>
+
+        <article class="feature reveal tilt">
+          <div class="feature-media"><img src="./assets/images/Shilpwellness.png" alt="Shilpwellness — Luxury Hammam and Spa" loading="lazy"></div>
+          <div class="feature-body">
+            <span class="feature-num">FEATURED / 03</span>
+            <h3>Shilpwellness</h3>
+            <p>A luxury Hammam &amp; spa for the alignment of mind, body and soul. Designed by Confluence-r, developed and consulted by Ave — Next.js, Tailwind CSS and a custom dashboard.</p>
+            <div class="tags"><span class="tag">Next.js</span><span class="tag">Tailwind</span><span class="tag">Dashboard</span></div>
+            <a class="feature-link" href="./assets/images/Shilpwellness.png" target="_blank" rel="noopener">View Project <i>↗</i></a>
+          </div>
+        </article>
+
+        <!-- archive + filters -->
+        <div class="filters reveal" id="filters" role="group" aria-label="Filter projects">
+          <button class="filter-btn active" data-filter="all">All <b id="countAll"></b></button>
+          <button class="filter-btn" data-filter="freelance">Freelance</button>
+          <button class="filter-btn" data-filter="agency">Agency</button>
+          <button class="filter-btn" data-filter="experiments">Experiments</button>
+          <button class="filter-btn" data-filter="media">Media &amp; Hardware</button>
+        </div>
+
+        <div class="grid" id="workGrid">
+          <a class="card" data-cat="freelance" href="./assets/images/api_tester.png" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/api_tester.png" alt="API Tester — Multi-Environment API Testing Tool" loading="lazy"></div>
+            <div class="card-body">
+              <h3>API Tester <i>↗</i></h3>
+              <p>Test APIs across environments with full Excel reports and email downtime monitoring. Built for IPRU, consulted by DePronto Infotech.</p>
+              <div class="tags"><span class="tag">Tooling</span><span class="tag">Monitoring</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="freelance" href="https://www.dcikigai.com" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/dcipl.png" alt="DCIPL — Personal Finance Planning System" loading="lazy"></div>
+            <div class="card-body">
+              <h3>DCIPL <i>↗</i></h3>
+              <p>Personal Finance Planning System for DC &amp; CO — React with complex PnC linking.</p>
+              <div class="tags"><span class="tag">React</span><span class="tag">FinTech</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="freelance" href="https://xtremepc.ml" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/xtreme-pc.png" alt="Xtreme PC — Computer Store" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Xtreme PC <i>↗</i></h3>
+              <p>Computer store for CM Computers — WordPress with WooCommerce integration.</p>
+              <div class="tags"><span class="tag">WordPress</span><span class="tag">WooCommerce</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="freelance" href="https://akshaybhopani.github.io/Ent-Portal/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-10.jpg" alt="Enterprise Portal" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Enterprise Portal <i>↗</i></h3>
+              <p>Locally deployed portal — central document repository, useful tools, and shared team knowledge.</p>
+              <div class="tags"><span class="tag">Intranet</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="freelance" href="https://sandhyakundnani.com" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/Sandhya-Kundnani.png" alt="Dr. Sandhya Kundnani's Website" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Dr. Sandhya Kundnani <i>↗</i></h3>
+              <p>Personal website — WordPress with a classic design and better content management.</p>
+              <div class="tags"><span class="tag">WordPress</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="freelance" href="https://thekdi123.github.io/Niyati-Portfolio/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/Niyati-Thekdi.png" alt="Niyati Thekdi's Portfolio" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Niyati Thekdi's Portfolio <i>↗</i></h3>
+              <p>Personal portfolio — Bootstrap 4 with the Paper Kit 2 UI Kit as a base theme.</p>
+              <div class="tags"><span class="tag">Bootstrap</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="agency" href="https://cbhogilal.in" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/cbc.png" alt="C Bhogilal & Co website" loading="lazy"></div>
+            <div class="card-body">
+              <h3>C Bhogilal &amp; Co <i>↗</i></h3>
+              <p>Since 1914, CBC has helped create spaces that ensure a luxurious start every morning.</p>
+              <div class="tags"><span class="tag">Luxury Retail</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="agency" href="https://dynamatics.com" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/dynamatics.png" alt="Dynamatics Technology website" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Dynamatics Technology <i>↗</i></h3>
+              <p>Highly engineered products for automotive, aeronautic, hydraulic and security applications.</p>
+              <div class="tags"><span class="tag">Corporate</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="agency" href="https://www.panandthedream.com/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/pan-and-dream.png" alt="Pan & The Dreams magazine" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Pan &amp; The Dreams <i>↗</i></h3>
+              <p>An art &amp; style print magazine inviting artists, writers and photographers to share their views.</p>
+              <div class="tags"><span class="tag">Editorial</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="agency" href="https://aasthafoundations.com/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/aastha.png" alt="Aastha Foundation website" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Aastha <i>↗</i></h3>
+              <p>Bringing community online — easier access to information, activities and funds for children who need it.</p>
+              <div class="tags"><span class="tag">Non-Profit</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="experiments" href="https://akshaybhopani.github.io/facerecognition/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-02.jpg" alt="Face Recognition app" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Face Recognition <i>↗</i></h3>
+              <p>React app that detects faces in photos using the Clarifai ML API.</p>
+              <div class="tags"><span class="tag">React</span><span class="tag">ML</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="experiments" href="https://akshaybhopani.github.io/POCO/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-03.jpg" alt="POCO startup landing page" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Startup Landing Page <i>↗</i></h3>
+              <p>POCO — powerful smartphones with technologies that truly matter.</p>
+              <div class="tags"><span class="tag">Landing Page</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="experiments" href="https://akshaybhopani.github.io/RoboFriends/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-04.jpg" alt="RoboFriends app" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Robo Friends <i>↗</i></h3>
+              <p>React app that finds names, e-mails and pictures of funny robots via the RoboHash API.</p>
+              <div class="tags"><span class="tag">React</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="experiments" href="https://akshaybhopani.github.io/JokeTeller/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/joke-teller.png" alt="Joke Teller app" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Joke Teller <i>↗</i></h3>
+              <p>Read and listen to programming jokes — JokesAPI + Voice RSS text-to-speech.</p>
+              <div class="tags"><span class="tag">JavaScript</span><span class="tag">TTS</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="experiments" href="https://minecraft.yourtechshow.com" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-13.png" alt="Minecraft Bedrock Server invite page" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Minecraft Bedrock Server <i>↗</i></h3>
+              <p>A fun Bedrock server on Google Cloud Platform with a beautiful invite page.</p>
+              <div class="tags"><span class="tag">GCP</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="experiments" href="https://akshaybhopani.github.io/PIP/" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/pip.png" alt="Picture In Picture app" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Picture In Picture <i>↗</i></h3>
+              <p>PiP any screen — getDisplayMedia capture piped into a picture-in-picture feed.</p>
+              <div class="tags"><span class="tag">Web APIs</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="media" href="https://store.yourtechshow.com" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-11.png" alt="Tech Store" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Tech Store <i>↗</i></h3>
+              <p>The Tech Show's WordPress storefront, launched 2020.</p>
+              <div class="tags"><span class="tag">WordPress</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="media" href="https://forum.yourtechshow.com" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-12.png" alt="The Tech Show Forum" loading="lazy"></div>
+            <div class="card-body">
+              <h3>The Tech Show Forum <i>↗</i></h3>
+              <p>phpBB community forum for The Tech Show, launched 2020.</p>
+              <div class="tags"><span class="tag">phpBB</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="media" href="https://downloads.yourtechshow.com" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-05.jpg" alt="The Tech Show Downloads" loading="lazy"></div>
+            <div class="card-body">
+              <h3>The Tech Show Downloads <i>↗</i></h3>
+              <p>Blogger-powered downloads hub, launched 2019.</p>
+              <div class="tags"><span class="tag">Blogger</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="media" href="https://saregamacarvaansongs.xyz" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/music-player.png" alt="Saregama Caarvan Music Player" loading="lazy"></div>
+            <div class="card-body">
+              <h3>Saregama Caarvan Player <i>↗</i></h3>
+              <p>Music player site with a companion Chrome extension, launched 2021.</p>
+              <div class="tags"><span class="tag">Chrome Ext</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="media" href="https://drive.google.com/file/d/1ajTq4yKCmV9d4SZS4vGXhlriVXbPIMap/view?usp=sharing" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-06.jpg" alt="H.E.V System hardware project" loading="lazy"></div>
+            <div class="card-body">
+              <h3>H.E.V System <i>↗</i></h3>
+              <p>Hybrid Electric Vehicle system, 2019 — read the published paper.</p>
+              <div class="tags"><span class="tag">Hardware</span></div>
+            </div>
+          </a>
+          <a class="card" data-cat="media" href="https://drive.google.com/file/d/0B3Pn0cesvTynSmptVUNoYklncmc/view?usp=sharing" target="_blank" rel="noopener">
+            <div class="card-thumb"><img src="./assets/images/img-08.jpg" alt="IR Security Control System" loading="lazy"></div>
+            <div class="card-body">
+              <h3>IR Security Control <i>↗</i></h3>
+              <p>Infrared security control system, 2016 — watch the presentation.</p>
+              <div class="tags"><span class="tag">Hardware</span></div>
+            </div>
+          </a>
+        </div>
+
+        <div class="work-foot reveal">
+          <a class="btn btn-line magnetic" href="https://github.com/akshaybhopani" target="_blank" rel="noopener">View Code on GitHub ↗</a>
+          <a class="btn btn-line magnetic" href="https://drive.google.com/drive/folders/0B3Pn0cesvTyndGFGRk9oSGdmbjQ?usp=sharing" target="_blank" rel="noopener">Certificates ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EXPERIENCE ================= -->
+    <section id="experience">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-num">03</span>
+          <h2 class="sec-title">The <em>Journey</em></h2>
+          <p class="sec-side">From soldering irons and RF networks to React trees and cloud consoles.</p>
+        </div>
+
+        <div class="exp-group reveal">
+          <p class="exp-label">// Full-Time</p>
+          <div class="exp-row">
+            <span class="exp-date">2021 — Present</span>
+            <div class="exp-main">
+              <h3>DePronto Infotech<small>Senior Software Developer</small></h3>
+              <p>Senior front-end developer on React JS &amp; jQuery for client websites, especially in the BFSI segment.</p>
+            </div>
+            <span class="exp-tag">React · BFSI</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">Aug 2020 — Present</span>
+            <div class="exp-main">
+              <h3>Confluence-r<small>Website Designer &amp; Developer</small></h3>
+              <p>Designing and building SEO-friendly websites for SMBs, managing Linux hosting end to end.</p>
+            </div>
+            <span class="exp-tag">Design · SEO</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">Jul 2019 — Jul 2020</span>
+            <div class="exp-main">
+              <h3>Orient Technologies<small>Network Support Engineer</small></h3>
+              <p>Fault finding and configuration on Tikona's Fibre-to-RF network — Cambium, LigoWave and TP-Link Pharos radios.</p>
+            </div>
+            <span class="exp-tag">Networks</span>
+          </div>
+        </div>
+
+        <div class="exp-group reveal">
+          <p class="exp-label">// Part-Time &amp; Community</p>
+          <div class="exp-row">
+            <span class="exp-date">Jul 2023 — Present</span>
+            <div class="exp-main">
+              <h3>Code Vipassana<small>Community Lead</small></h3>
+              <p>Empowering developers to learn, build and explore Google Cloud with developer experts at Google.</p>
+            </div>
+            <span class="exp-tag">Google Cloud</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">2015 — Present</span>
+            <div class="exp-main">
+              <h3>The Tech Show Media Group<small>Founder, Editor &amp; Writer</small></h3>
+              <p>Simplifying technology for people — assembling, upgrading, unboxing and review videos and articles.</p>
+            </div>
+            <span class="exp-tag">Content</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">Apr — Aug 2021</span>
+            <div class="exp-main">
+              <h3>DC &amp; CO<small>Tech Lead</small></h3>
+              <p>Led front-end and back-end teams building a Personal Finance Management System for DCIPL.</p>
+            </div>
+            <span class="exp-tag">Leadership</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">Jul 2016 — Feb 2017</span>
+            <div class="exp-main">
+              <h3>Xiaomi Technology<small>Moderator, Mi Community India</small></h3>
+              <p>Helping Xiaomi users solve tech problems in Mi Community — a home for Indian Mi fans.</p>
+            </div>
+            <span class="exp-tag">Community</span>
+          </div>
+        </div>
+
+        <div class="exp-group reveal">
+          <p class="exp-label">// Internships</p>
+          <div class="exp-row">
+            <span class="exp-date">Jun — Jul 2018</span>
+            <div class="exp-main">
+              <h3>Reliance Jio<small>Digital Champion</small></h3>
+              <p>Empowering Indian SMBs on the world's largest data network. Won silver certification.</p>
+            </div>
+            <span class="exp-tag">Telecom</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">Jun — Jul 2017</span>
+            <div class="exp-main">
+              <h3>Central Railway<small>Trainee</small></h3>
+              <p>Telecom department of Indian Railways — basic signalling and Railnet.</p>
+            </div>
+            <span class="exp-tag">Telecom</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">May — Jun 2016</span>
+            <div class="exp-main">
+              <h3>Vedang Radio Technology<small>Software Trainee</small></h3>
+              <p>Atmel and ST board programming and setup.</p>
+            </div>
+            <span class="exp-tag">Embedded</span>
+          </div>
+          <div class="exp-row">
+            <span class="exp-date">May — Jun 2013</span>
+            <div class="exp-main">
+              <h3>Raychem RPG<small>Trainee</small></h3>
+              <p>Cathodic protection techniques and rectifier manufacturing.</p>
+            </div>
+            <span class="exp-tag">Hardware</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section id="skills">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-num">04</span>
+          <h2 class="sec-title">The <em>Arsenal</em></h2>
+        </div>
+      </div>
+      <div class="skill-belt marquee">
+        <div class="marquee-track">
+          <span><span class="skill-chip">React JS <i>◆</i></span><span class="skill-chip">Next JS <i>◆</i></span><span class="skill-chip">Node JS <i>◆</i></span><span class="skill-chip">Express JS <i>◆</i></span><span class="skill-chip">JavaScript <i>◆</i></span><span class="skill-chip">Postgres SQL <i>◆</i></span><span class="skill-chip">Liquid <i>◆</i></span><span class="skill-chip">HTML5 <i>◆</i></span><span class="skill-chip">CSS3 <i>◆</i></span></span>
+          <span><span class="skill-chip">React JS <i>◆</i></span><span class="skill-chip">Next JS <i>◆</i></span><span class="skill-chip">Node JS <i>◆</i></span><span class="skill-chip">Express JS <i>◆</i></span><span class="skill-chip">JavaScript <i>◆</i></span><span class="skill-chip">Postgres SQL <i>◆</i></span><span class="skill-chip">Liquid <i>◆</i></span><span class="skill-chip">HTML5 <i>◆</i></span><span class="skill-chip">CSS3 <i>◆</i></span></span>
+        </div>
+      </div>
+      <div class="skill-belt marquee rev">
+        <div class="marquee-track">
+          <span><span class="skill-chip">Google Cloud <i>◇</i></span><span class="skill-chip">WordPress <i>◇</i></span><span class="skill-chip">WooCommerce <i>◇</i></span><span class="skill-chip">Shopify <i>◇</i></span><span class="skill-chip">cPanel <i>◇</i></span><span class="skill-chip">phpBB <i>◇</i></span><span class="skill-chip">FreeNAS <i>◇</i></span><span class="skill-chip">cnMaestro <i>◇</i></span><span class="skill-chip">Siebel <i>◇</i></span><span class="skill-chip">ZenDesk <i>◇</i></span></span>
+          <span><span class="skill-chip">Google Cloud <i>◇</i></span><span class="skill-chip">WordPress <i>◇</i></span><span class="skill-chip">WooCommerce <i>◇</i></span><span class="skill-chip">Shopify <i>◇</i></span><span class="skill-chip">cPanel <i>◇</i></span><span class="skill-chip">phpBB <i>◇</i></span><span class="skill-chip">FreeNAS <i>◇</i></span><span class="skill-chip">cnMaestro <i>◇</i></span><span class="skill-chip">Siebel <i>◇</i></span><span class="skill-chip">ZenDesk <i>◇</i></span></span>
+        </div>
+      </div>
+      <div class="skill-belt marquee">
+        <div class="marquee-track">
+          <span><span class="skill-chip">PCB Design <i>◆</i></span><span class="skill-chip">PCB Soldering <i>◆</i></span><span class="skill-chip">Circuit Debug <i>◆</i></span><span class="skill-chip">Linux Servers <i>◆</i></span><span class="skill-chip">NAS Setup <i>◆</i></span><span class="skill-chip">PC Assembly <i>◆</i></span><span class="skill-chip">Crypto Mining <i>◆</i></span><span class="skill-chip">Router &amp; Switch Mgmt <i>◆</i></span></span>
+          <span><span class="skill-chip">PCB Design <i>◆</i></span><span class="skill-chip">PCB Soldering <i>◆</i></span><span class="skill-chip">Circuit Debug <i>◆</i></span><span class="skill-chip">Linux Servers <i>◆</i></span><span class="skill-chip">NAS Setup <i>◆</i></span><span class="skill-chip">PC Assembly <i>◆</i></span><span class="skill-chip">Crypto Mining <i>◆</i></span><span class="skill-chip">Router &amp; Switch Mgmt <i>◆</i></span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EDUCATION ================= -->
+    <section id="education">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-num">05</span>
+          <h2 class="sec-title">The <em>Foundation</em></h2>
+        </div>
+        <div class="edu-grid">
+          <div class="edu-card reveal">
+            <span class="mono">2019 — Present</span>
+            <h3>Coding &amp; Computer Science</h3>
+            <p>Zero To Mastery Academy — Online</p>
+          </div>
+          <div class="edu-card reveal" style="--d:.08s">
+            <span class="mono">2016 — 2019</span>
+            <h3>B.E. Electronics &amp; Telecommunication</h3>
+            <p>Vivekanand Education Society Institute of Technology</p>
+          </div>
+          <div class="edu-card reveal" style="--d:.16s">
+            <span class="mono">2014 — 2016</span>
+            <h3>Diploma, Electronics &amp; Telecom</h3>
+            <p>Vivekanand Education Society Polytechnic</p>
+          </div>
+          <div class="edu-card reveal" style="--d:.24s">
+            <span class="mono">2012 — 2014</span>
+            <h3>H.S.C. Vocational, Electronics</h3>
+            <p>N.E.S. Vocational Junior College</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HIGHLIGHTS ================= -->
+    <section id="highlights" style="background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="sec-num">06</span>
+          <h2 class="sec-title">In The <em>Spotlight</em></h2>
+        </div>
+
+        <div class="spotlight reveal">
+          <img src="./assets/images/img-09.jpg" alt="Akshay Bhopani interview on Mi Community" loading="lazy">
+          <div class="spotlight-body">
+            <span class="mono" style="color:var(--lime)">// Interview</span>
+            <h3>Featured on Mi Community India</h3>
+            <p>An interview about the journey as a moderator and tech enthusiast, featured on Xiaomi's official Indian community.</p>
+            <div><a class="btn btn-solid magnetic" href="https://in.c.mi.com/thread-54296-1-1.html" target="_blank" rel="noopener"><span>Read the Interview</span></a></div>
+          </div>
+        </div>
+
+        <div class="media-grid">
+          <figure class="media-card reveal">
+            <video src="./assets/Videos/Confluence-r Color Update.mp4" controls preload="metadata"></video>
+            <figcaption>Commercial — Confluence-r Color Update</figcaption>
+          </figure>
+          <figure class="media-card reveal">
+            <iframe src="https://www.youtube.com/embed/BaSdo3VfLd8" title="YouTube video player" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <figcaption>Commercial — YouTube Feature</figcaption>
+          </figure>
+          <figure class="media-card reveal">
+            <video src="./assets/Videos/The Tech Show March 2025 Launch.mov" controls preload="metadata"></video>
+            <figcaption>The Tech Show — March 2025 Launch</figcaption>
+          </figure>
+          <figure class="media-card reveal">
+            <blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">Here&#39;s a good tutorial for deploying a React JS app to a serverless environment.<br><br>It shows off <a href="https://twitter.com/googlecloud?ref_src=twsrc%5Etfw">@googlecloud</a> Firestore, Cloud Run, and more.<a href="https://t.co/RhEVPr1IaF">https://t.co/RhEVPr1IaF</a></p>&mdash; Richard Seroter (@rseroter) <a href="https://twitter.com/rseroter/status/1712570081904144458?ref_src=twsrc%5Etfw">October 12, 2023</a></blockquote>
+            <figcaption>Featured Tweet — shared by Google Cloud's Chief Evangelist</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section id="contact">
+      <div class="wrap contact-inner">
+        <p class="mono contact-kicker reveal">// Got an idea? Let's make it real</p>
+        <h2 class="contact-title reveal">
+          Let's Build<br>
+          <span class="stroke">Something</span><br>
+          <a href="https://yourtechshow.com/develop" target="_blank" rel="noopener">Iconic.</a>
+        </h2>
+        <p class="contact-sub reveal">Whether it's a product idea, a website that needs a serious upgrade, or a content collaboration — my inbox is always open.</p>
+        <div class="contact-actions reveal">
+          <a class="big-circle magnetic" href="https://yourtechshow.com/call" target="_blank" rel="noopener">Book<br>a Call ↗</a>
+          <a class="btn btn-line magnetic" href="https://www.linkedin.com/in/akshaybhopani/" target="_blank" rel="noopener">Connect on LinkedIn</a>
+          <a class="btn btn-line magnetic" href="https://yourtechshow.com/develop" target="_blank" rel="noopener">Talk Business</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer role="contentinfo">
+    <div class="wrap">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <h3>AKSHAY<span style="color:var(--muted)">.DEV</span></h3>
+          <p>Senior Web Engineer, Tech Content Creator &amp; AI Enthusiast — Mumbai, India.</p>
+          <a href="https://www.yourtechshow.com" target="_blank" rel="noopener" aria-label="Visit The Tech Show">
+            <img src="./assets/images/logo.png" alt="The Tech Show Logo" loading="lazy">
+          </a>
+        </div>
+        <div class="foot-col">
+          <h4>Navigate</h4>
+          <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>Socials</h4>
+          <ul>
+            <li><a href="https://github.com/akshaybhopani" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/akshaybhopani/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://youtube.com/akshaybhopani" target="_blank" rel="noopener">YouTube</a></li>
+            <li><a href="https://twitter.com/akshaybhopani" target="_blank" rel="noopener">Twitter / X</a></li>
+            <li><a href="https://facebook.com/akshaybhopani" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>Elsewhere</h4>
+          <ul>
+            <li><a href="https://www.yourtechshow.com" target="_blank" rel="noopener">The Tech Show</a></li>
+            <li><a href="https://akshaybhopani.medium.com/" target="_blank" rel="noopener">Medium</a></li>
+            <li><a href="https://www.quora.com/profile/Akshay-Bhopani" target="_blank" rel="noopener">Quora</a></li>
+            <li><a href="https://t.me/akshaybhopani" target="_blank" rel="noopener">Telegram</a></li>
+            <li><a href="https://drive.google.com/file/d/12Txj0Zhu_L0Ojaj7IKcI2AB57KR8yB6u/view?usp=sharing" target="_blank" rel="noopener">Resume</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bar">
+        <span>© <time datetime="2026">2026</time> Akshay Bhopani — Made with 💛</span>
+        <span class="time" id="localTime">--:--:-- IST</span>
+        <a class="back-top" href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <script async defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js" defer></script>
+  <script>
+    (function () {
+      "use strict";
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var flat = /[?&]flat=1/.test(location.search);
+      if (flat) {
+        reduced = true;
+        document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("visible"); });
+      }
+
+      /* ---------- preloader ---------- */
+      var pre = document.getElementById("preloader");
+      var preCount = document.getElementById("preCount");
+      if (location.hash || reduced) {
+        pre.remove();
+        document.querySelector(".hero").classList.add("on");
+        pre = null;
+      }
+      var n = 0;
+      var preTimer = pre && setInterval(function () {
+        n = Math.min(100, n + Math.ceil(Math.random() * 18));
+        preCount.textContent = (n < 10 ? "0" : "") + n;
+        if (n >= 100) {
+          clearInterval(preTimer);
+          setTimeout(function () {
+            pre.classList.add("done");
+            document.querySelector(".hero").classList.add("on");
+            setTimeout(function () { pre.remove(); }, 1000);
+          }, 250);
+        }
+      }, 70);
+
+      /* ---------- lenis smooth scroll ---------- */
+      window.addEventListener("load", function () {
+        if (window.Lenis && !reduced) {
+          var lenis = new Lenis({ lerp: 0.09 });
+          window.__lenis = lenis;
+          document.documentElement.style.scrollBehavior = "auto";
+          function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+          requestAnimationFrame(raf);
+          document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+            a.addEventListener("click", function (e) {
+              var href = a.getAttribute("href");
+              var target = href.length > 1 ? document.querySelector(href) : document.body;
+              if (target) {
+                e.preventDefault();
+                lenis.scrollTo(href === "#top" ? 0 : target, { offset: -80 });
+              }
+            });
+          });
+        }
+      });
+
+      /* ---------- custom cursor ---------- */
+      if (window.matchMedia("(pointer: fine)").matches && !reduced) {
+        document.documentElement.classList.add("has-cursor");
+        var dot = document.getElementById("cursorDot");
+        var ring = document.getElementById("cursorRing");
+        var mx = -100, my = -100, rx = -100, ry = -100;
+        window.addEventListener("mousemove", function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+        (function cursorLoop() {
+          rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
+          dot.style.transform = "translate(" + mx + "px," + my + "px) translate(-50%,-50%)";
+          ring.style.transform = "translate(" + rx + "px," + ry + "px) translate(-50%,-50%)";
+          requestAnimationFrame(cursorLoop);
+        })();
+        document.addEventListener("mouseover", function (e) {
+          if (e.target.closest("a, button, .card, video")) ring.classList.add("is-hover");
+        });
+        document.addEventListener("mouseout", function (e) {
+          if (e.target.closest("a, button, .card, video")) ring.classList.remove("is-hover");
+        });
+      }
+
+      /* ---------- nav ---------- */
+      var nav = document.getElementById("nav");
+      var lastY = 0;
+      window.addEventListener("scroll", function () {
+        var y = window.scrollY;
+        nav.classList.toggle("solid", y > 40);
+        nav.classList.toggle("hidden", y > 400 && y > lastY && !document.body.classList.contains("menu-open"));
+        lastY = y;
+        /* progress bar */
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        document.getElementById("progress").style.transform = "scaleX(" + (h ? y / h : 0) + ")";
+      }, { passive: true });
+
+      var toggle = document.getElementById("navToggle");
+      toggle.addEventListener("click", function () {
+        var open = document.body.classList.toggle("menu-open");
+        toggle.setAttribute("aria-expanded", open);
+      });
+      document.getElementById("navLinks").addEventListener("click", function (e) {
+        if (e.target.tagName === "A") {
+          document.body.classList.remove("menu-open");
+          toggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      /* active section highlight */
+      var navAnchors = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
+      var secObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            navAnchors.forEach(function (a) {
+              a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id);
+            });
+          }
+        });
+      }, { rootMargin: "-40% 0px -55% 0px" });
+      ["about", "work", "experience", "skills", "highlights", "contact"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) secObserver.observe(el);
+      });
+
+      /* ---------- reveal on scroll ---------- */
+      var revealEls = document.querySelectorAll(".reveal");
+      if ("IntersectionObserver" in window) {
+        var ro = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add("visible"); ro.unobserve(en.target); }
+          });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        revealEls.forEach(function (el) { ro.observe(el); });
+      } else {
+        revealEls.forEach(function (el) { el.classList.add("visible"); });
+      }
+
+      /* ---------- scramble text ---------- */
+      var roles = ["REACT APPS", "NEXT.JS PRODUCTS", "AI EXPERIENCES", "SEO-FIRST SITES", "TECH STORIES", "CLOUD THINGS"];
+      var scrambleEl = document.getElementById("scramble");
+      var glyphs = "!<>-_\\/[]{}=+*^?#ABCDEF";
+      var roleIdx = 0;
+      function scrambleTo(text) {
+        var frame = 0, total = 22;
+        var timer = setInterval(function () {
+          var out = "";
+          for (var i = 0; i < text.length; i++) {
+            var progress = (frame / total) * text.length;
+            out += i < progress ? text[i] : glyphs[Math.floor(Math.random() * glyphs.length)];
+          }
+          scrambleEl.textContent = out;
+          if (++frame > total) { clearInterval(timer); scrambleEl.textContent = text; }
+        }, 34);
+      }
+      if (!reduced) {
+        setInterval(function () {
+          roleIdx = (roleIdx + 1) % roles.length;
+          scrambleTo(roles[roleIdx]);
+        }, 3400);
+      }
+
+      /* ---------- animated counters ---------- */
+      var counters = document.querySelectorAll("[data-count]");
+      var co = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          co.unobserve(en.target);
+          var el = en.target, target = parseInt(el.getAttribute("data-count"), 10);
+          var start = null, dur = 1400;
+          function step(ts) {
+            if (!start) start = ts;
+            var p = Math.min(1, (ts - start) / dur);
+            el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }, { threshold: 0.6 });
+      counters.forEach(function (el) { co.observe(el); });
+
+      /* ---------- card spotlight ---------- */
+      document.querySelectorAll(".card").forEach(function (card) {
+        card.addEventListener("mousemove", function (e) {
+          var r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", (e.clientX - r.left) + "px");
+          card.style.setProperty("--my", (e.clientY - r.top) + "px");
+        }, { passive: true });
+      });
+
+      /* ---------- tilt on featured ---------- */
+      if (!reduced) {
+        document.querySelectorAll(".tilt").forEach(function (el) {
+          el.addEventListener("mousemove", function (e) {
+            var r = el.getBoundingClientRect();
+            var px = (e.clientX - r.left) / r.width - 0.5;
+            var py = (e.clientY - r.top) / r.height - 0.5;
+            el.style.transform = "perspective(1200px) rotateY(" + px * 4 + "deg) rotateX(" + py * -4 + "deg)";
+          }, { passive: true });
+          el.addEventListener("mouseleave", function () { el.style.transform = ""; });
+        });
+      }
+
+      /* ---------- magnetic buttons ---------- */
+      if (!reduced && window.matchMedia("(pointer: fine)").matches) {
+        document.querySelectorAll(".magnetic").forEach(function (el) {
+          el.addEventListener("mousemove", function (e) {
+            var r = el.getBoundingClientRect();
+            var x = (e.clientX - r.left - r.width / 2) * 0.25;
+            var y = (e.clientY - r.top - r.height / 2) * 0.25;
+            el.style.transform = "translate(" + x + "px," + y + "px)";
+          }, { passive: true });
+          el.addEventListener("mouseleave", function () { el.style.transform = ""; });
+        });
+      }
+
+      /* ---------- work filters ---------- */
+      var filterBtns = document.querySelectorAll(".filter-btn");
+      var cards = document.querySelectorAll("#workGrid .card");
+      document.getElementById("countAll").textContent = "(" + cards.length + ")";
+      filterBtns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          filterBtns.forEach(function (b) { b.classList.remove("active"); });
+          btn.classList.add("active");
+          var f = btn.getAttribute("data-filter");
+          cards.forEach(function (c) {
+            var show = f === "all" || c.getAttribute("data-cat") === f;
+            c.classList.toggle("hide", !show);
+            if (show) { c.style.animation = "none"; void c.offsetWidth; c.style.animation = ""; }
+          });
+        });
+      });
+
+      /* ---------- local time (IST) ---------- */
+      var timeEl = document.getElementById("localTime");
+      function tick() {
+        try {
+          timeEl.textContent = new Date().toLocaleTimeString("en-IN", {
+            timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true
+          }) + " IST";
+        } catch (e) { timeEl.textContent = new Date().toLocaleTimeString(); }
+      }
+      tick(); setInterval(tick, 1000);
+    })();
+  </script>
+</body>
 
 </html>
