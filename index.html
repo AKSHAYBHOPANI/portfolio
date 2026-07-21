@@ -150,9 +150,24 @@
       transition: transform .45s var(--ease), background .3s;
       background: linear-gradient(rgba(6, 7, 9, .85), rgba(6, 7, 9, 0));
     }
-    .nav.solid { background: rgba(6, 7, 9, .82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); }
+    /*
+      backdrop-filter / transform on .nav create a containing block for position:fixed
+      children — which traps the mobile menu inside the 76px bar when scrolled.
+      Blur lives on a pseudo so fixed .nav-links still anchor to the viewport.
+    */
+    .nav.solid {
+      background: rgba(6, 7, 9, .82);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav.solid::before {
+      content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
     .nav.hidden { transform: translateY(-100%); }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .nav-inner {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: space-between; height: 76px;
+    }
     .brand { font-family: var(--display); font-weight: 700; font-size: 1.2rem; letter-spacing: .01em; display: flex; align-items: center; gap: 10px; }
     .brand i { width: 9px; height: 9px; border-radius: 50%; background: var(--lime); display: inline-block; font-style: normal; box-shadow: 0 0 12px var(--lime); }
     .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
@@ -169,22 +184,52 @@
     }
     .nav-links a.cta::after { display: none; }
     .nav-links a.cta:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(214, 255, 63, .35); color: #000; }
-    .nav-toggle { display: none; z-index: 1100; }
-    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--ink); margin: 6px 0; border-radius: 2px; transition: .3s var(--ease); }
+    .nav-toggle {
+      display: none; position: relative; z-index: 1100;
+      width: 44px; height: 44px; margin-right: -10px;
+      align-items: center; justify-content: center; flex-direction: column;
+    }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--ink); margin: 3px 0; border-radius: 2px; transition: .3s var(--ease); }
     body.menu-open .nav-toggle span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     body.menu-open .nav-toggle span:nth-child(2) { opacity: 0; }
     body.menu-open .nav-toggle span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
+    /* Keep nav + menu usable while open (ignore hide-on-scroll transform) */
+    body.menu-open {
+      overflow: hidden;
+    }
+    body.menu-open .nav {
+      transform: none !important;
+      z-index: 2000;
+    }
+    body.menu-open .nav.solid::before { display: none; }
+
     @media (max-width: 860px) {
-      .nav-toggle { display: block; }
+      .nav-toggle { display: flex; }
       .nav-links {
-        position: fixed; inset: 0; z-index: 1050; flex-direction: column; justify-content: center; gap: 8px;
-        background: rgba(6, 7, 9, .97); backdrop-filter: blur(20px);
-        opacity: 0; pointer-events: none; transition: opacity .35s;
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        width: 100%; height: 100%;
+        height: 100dvh;
+        z-index: 1050;
+        flex-direction: column; justify-content: center; align-items: center; gap: 8px;
+        margin: 0; padding: max(76px, env(safe-area-inset-top)) 24px 40px;
+        background: rgba(6, 7, 9, .97);
+        backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+        opacity: 0; visibility: hidden; pointer-events: none;
+        transition: opacity .35s, visibility .35s;
+        overflow-y: auto; -webkit-overflow-scrolling: touch;
       }
-      body.menu-open .nav-links { opacity: 1; pointer-events: auto; }
-      .nav-links a { font-family: var(--display); font-size: 2rem; text-transform: none; letter-spacing: 0; padding: 10px; }
-      .nav-links a.cta { margin-top: 18px; font-size: 1rem; }
+      body.menu-open .nav-links {
+        opacity: 1; visibility: visible; pointer-events: auto;
+      }
+      .nav-links a {
+        font-family: var(--display); font-size: clamp(1.6rem, 7vw, 2rem);
+        text-transform: none; letter-spacing: 0; padding: 10px;
+      }
+      /* margin on li — flex children of the column menu, not the anchor */
+      .nav-links li:has(> a.cta) { margin-top: 32px; }
+      .nav-links a.cta { margin-top: 0; font-size: 1rem; }
+      .nav-links a::after { display: none; }
     }
 
     /* ================= HERO ================= */
@@ -662,7 +707,7 @@
           <p class="hero-sub reveal" style="--d:.6s">Crafting fast, SEO-first products with React &amp; Next.js by day — telling the stories behind the tech on YouTube, blogs and beyond by night.</p>
           <div class="hero-actions reveal" style="--d:.7s">
             <a class="btn btn-solid magnetic" href="#work"><span>View Selected Work</span></a>
-            <a class="btn btn-line magnetic" href="https://yourtechshow.com/call" target="_blank" rel="noopener">Book a Call ↗</a>
+            <a class="btn btn-line magnetic" href="https://yourtechshow.com/Call" target="_blank" rel="noopener">Book a Call ↗</a>
           </div>
         </div>
       </div>
@@ -1174,7 +1219,7 @@
         </h2>
         <p class="contact-sub reveal">Whether it's a product idea, a website that needs a serious upgrade, or a content collaboration — my inbox is always open.</p>
         <div class="contact-actions reveal">
-          <a class="big-circle magnetic" href="https://yourtechshow.com/call" target="_blank" rel="noopener">Book<br>a Call ↗</a>
+          <a class="big-circle magnetic" href="https://yourtechshow.com/Call" target="_blank" rel="noopener">Book<br>a Call ↗</a>
           <a class="btn btn-line magnetic" href="https://www.linkedin.com/in/akshaybhopani/" target="_blank" rel="noopener">Connect on LinkedIn</a>
           <a class="btn btn-line magnetic" href="https://yourtechshow.com/develop" target="_blank" rel="noopener">Talk Business</a>
         </div>
@@ -1311,10 +1356,41 @@
       /* ---------- nav ---------- */
       var nav = document.getElementById("nav");
       var lastY = 0;
+      var menuScrollY = 0;
+
+      function setMenuOpen(open) {
+        document.body.classList.toggle("menu-open", open);
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) {
+          /* Unhide nav if it was auto-hidden on scroll; lock scroll under the overlay */
+          nav.classList.remove("hidden");
+          menuScrollY = window.scrollY || window.pageYOffset || 0;
+          document.body.style.position = "fixed";
+          document.body.style.top = "-" + menuScrollY + "px";
+          document.body.style.left = "0";
+          document.body.style.right = "0";
+          document.body.style.width = "100%";
+          if (window.__lenis) window.__lenis.stop();
+        } else {
+          document.body.style.position = "";
+          document.body.style.top = "";
+          document.body.style.left = "";
+          document.body.style.right = "";
+          document.body.style.width = "";
+          if (window.__lenis) {
+            window.__lenis.start();
+            window.__lenis.scrollTo(menuScrollY, { immediate: true });
+          } else {
+            window.scrollTo(0, menuScrollY);
+          }
+        }
+      }
+
       window.addEventListener("scroll", function () {
+        if (document.body.classList.contains("menu-open")) return;
         var y = window.scrollY;
         nav.classList.toggle("solid", y > 40);
-        nav.classList.toggle("hidden", y > 400 && y > lastY && !document.body.classList.contains("menu-open"));
+        nav.classList.toggle("hidden", y > 400 && y > lastY);
         lastY = y;
         /* progress bar */
         var h = document.documentElement.scrollHeight - window.innerHeight;
@@ -1323,14 +1399,13 @@
 
       var toggle = document.getElementById("navToggle");
       toggle.addEventListener("click", function () {
-        var open = document.body.classList.toggle("menu-open");
-        toggle.setAttribute("aria-expanded", open);
+        setMenuOpen(!document.body.classList.contains("menu-open"));
       });
       document.getElementById("navLinks").addEventListener("click", function (e) {
-        if (e.target.tagName === "A") {
-          document.body.classList.remove("menu-open");
-          toggle.setAttribute("aria-expanded", "false");
-        }
+        if (e.target.tagName === "A") setMenuOpen(false);
+      });
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && document.body.classList.contains("menu-open")) setMenuOpen(false);
       });
 
       /* active section highlight */
