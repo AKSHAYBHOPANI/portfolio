@@ -208,8 +208,7 @@
       .nav-toggle { display: flex; }
       .nav-links {
         position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        width: 100%; height: 100%;
-        height: 100dvh;
+        width: 100vw; height: 100%; height: 100dvh;
         z-index: 1050;
         flex-direction: column; justify-content: center; align-items: center; gap: 8px;
         margin: 0; padding: max(76px, env(safe-area-inset-top)) 24px 40px;
@@ -218,17 +217,26 @@
         opacity: 0; visibility: hidden; pointer-events: none;
         transition: opacity .35s, visibility .35s;
         overflow-y: auto; -webkit-overflow-scrolling: touch;
+        list-style: none;
       }
       body.menu-open .nav-links {
         opacity: 1; visibility: visible; pointer-events: auto;
       }
+      body.menu-open .nav-toggle { z-index: 1101; }
+      .nav-links li { width: 100%; text-align: center; }
       .nav-links a {
         font-family: var(--display); font-size: clamp(1.6rem, 7vw, 2rem);
         text-transform: none; letter-spacing: 0; padding: 10px;
+        display: inline-flex; align-items: center; justify-content: center;
+        touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+        position: relative; z-index: 1;
       }
       /* margin on li — flex children of the column menu, not the anchor */
-      .nav-links li:has(> a.cta) { margin-top: 32px; }
-      .nav-links a.cta { margin-top: 0; font-size: 1rem; }
+      .nav-links li.nav-cta { margin-top: 32px; }
+      .nav-links a.cta {
+        margin-top: 0; font-size: 1rem;
+        min-height: 48px; padding: 12px 28px;
+      }
       .nav-links a::after { display: none; }
     }
 
@@ -676,7 +684,7 @@
         <li><a href="#skills">Skills</a></li>
         <li><a href="#highlights">Highlights</a></li>
         <li><a href="https://drive.google.com/file/d/12Txj0Zhu_L0Ojaj7IKcI2AB57KR8yB6u/view?usp=sharing" target="_blank" rel="noopener">Resume</a></li>
-        <li><a class="cta" href="#contact">Let's Talk</a></li>
+        <li class="nav-cta"><a class="cta" href="https://yourtechshow.com/Call" target="_blank" rel="noopener">Let's Talk</a></li>
       </ul>
     </div>
   </nav>
@@ -1311,6 +1319,142 @@
         }
       }, 70);
 
+      /* ---------- nav + hash scroll ---------- */
+      var nav = document.getElementById("nav");
+      var toggle = document.getElementById("navToggle");
+      var navLinks = document.getElementById("navLinks");
+      var lastY = 0;
+      var menuScrollY = 0;
+
+      function getScrollY() {
+        return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      }
+
+      function unlockBodyScroll() {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.style.width = "";
+      }
+
+      function lockBodyScroll() {
+        menuScrollY = getScrollY();
+        document.body.style.position = "fixed";
+        document.body.style.top = "-" + menuScrollY + "px";
+        document.body.style.left = "0";
+        document.body.style.right = "0";
+        document.body.style.width = "100%";
+      }
+
+      function restoreScrollPos() {
+        unlockBodyScroll();
+        if (window.__lenis) {
+          window.__lenis.start();
+          window.__lenis.scrollTo(menuScrollY, { immediate: true });
+        } else {
+          window.scrollTo(0, menuScrollY);
+        }
+      }
+
+      function scrollToHash(href) {
+        if (!href || href === "#") return false;
+        if (href === "#top") {
+          if (window.__lenis) window.__lenis.scrollTo(0);
+          else window.scrollTo({ top: 0, behavior: "smooth" });
+          return true;
+        }
+        var target = document.querySelector(href);
+        if (!target) return false;
+
+        /* Prefer native distance — more reliable after menu unlock on iOS */
+        var top = Math.max(0, target.getBoundingClientRect().top + getScrollY() - 80);
+
+        if (window.__lenis) {
+          try {
+            window.__lenis.scrollTo(target, { offset: -80 });
+          } catch (err) {
+            window.__lenis.scrollTo(top);
+          }
+        } else {
+          window.scrollTo({ top: top, behavior: "smooth" });
+        }
+        return true;
+      }
+
+      function setMenuOpen(open) {
+        document.body.classList.toggle("menu-open", !!open);
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+
+        if (open) {
+          nav.classList.remove("hidden");
+          lockBodyScroll();
+          if (window.__lenis) window.__lenis.stop();
+        } else {
+          restoreScrollPos();
+        }
+      }
+
+      /**
+       * Close the mobile menu, then navigate.
+       * Hash links need unlock → restore → delayed scroll (iOS + Lenis).
+       * External links keep default browser navigation (incl. target=_blank).
+       */
+      function closeMenuThen(navigateFn) {
+        if (!document.body.classList.contains("menu-open")) {
+          if (navigateFn) navigateFn();
+          return;
+        }
+        document.body.classList.remove("menu-open");
+        toggle.setAttribute("aria-expanded", "false");
+        restoreScrollPos();
+        if (navigateFn) {
+          /* Wait for fixed-body unlock + Lenis restart to settle */
+          setTimeout(navigateFn, 80);
+        }
+      }
+
+      window.addEventListener("scroll", function () {
+        if (document.body.classList.contains("menu-open")) return;
+        var y = getScrollY();
+        nav.classList.toggle("solid", y > 40);
+        nav.classList.toggle("hidden", y > 400 && y > lastY);
+        lastY = y;
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        document.getElementById("progress").style.transform = "scaleX(" + (h ? y / h : 0) + ")";
+      }, { passive: true });
+
+      toggle.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setMenuOpen(!document.body.classList.contains("menu-open"));
+      });
+
+      navLinks.addEventListener("click", function (e) {
+        var a = e.target.closest("a");
+        if (!a || !navLinks.contains(a)) return;
+
+        var href = a.getAttribute("href") || "";
+
+        /* In-page section links */
+        if (href.charAt(0) === "#") {
+          e.preventDefault();
+          closeMenuThen(function () { scrollToHash(href); });
+          return;
+        }
+
+        /* External / Call / Resume — close overlay, let the browser follow the link */
+        if (document.body.classList.contains("menu-open")) {
+          document.body.classList.remove("menu-open");
+          toggle.setAttribute("aria-expanded", "false");
+          restoreScrollPos();
+        }
+      });
+
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && document.body.classList.contains("menu-open")) setMenuOpen(false);
+      });
+
       /* ---------- lenis smooth scroll ---------- */
       window.addEventListener("load", function () {
         if (window.Lenis && !reduced) {
@@ -1319,16 +1463,21 @@
           document.documentElement.style.scrollBehavior = "auto";
           function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
           requestAnimationFrame(raf);
-          document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-            a.addEventListener("click", function (e) {
-              var href = a.getAttribute("href");
-              var target = href.length > 1 ? document.querySelector(href) : document.body;
-              if (target) {
-                e.preventDefault();
-                lenis.scrollTo(href === "#top" ? 0 : target, { offset: -80 });
-              }
-            });
-          });
+        }
+      });
+
+      /* Other in-page anchors (hero buttons, footer, brand) */
+      document.addEventListener("click", function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (!a || a.closest("#navLinks")) return;
+        var href = a.getAttribute("href");
+        if (!href || href === "#") return;
+        if (href !== "#top" && !document.querySelector(href)) return;
+        e.preventDefault();
+        if (document.body.classList.contains("menu-open")) {
+          closeMenuThen(function () { scrollToHash(href); });
+        } else {
+          scrollToHash(href);
         }
       });
 
@@ -1352,61 +1501,6 @@
           if (e.target.closest("a, button, .card, video")) ring.classList.remove("is-hover");
         });
       }
-
-      /* ---------- nav ---------- */
-      var nav = document.getElementById("nav");
-      var lastY = 0;
-      var menuScrollY = 0;
-
-      function setMenuOpen(open) {
-        document.body.classList.toggle("menu-open", open);
-        toggle.setAttribute("aria-expanded", open ? "true" : "false");
-        if (open) {
-          /* Unhide nav if it was auto-hidden on scroll; lock scroll under the overlay */
-          nav.classList.remove("hidden");
-          menuScrollY = window.scrollY || window.pageYOffset || 0;
-          document.body.style.position = "fixed";
-          document.body.style.top = "-" + menuScrollY + "px";
-          document.body.style.left = "0";
-          document.body.style.right = "0";
-          document.body.style.width = "100%";
-          if (window.__lenis) window.__lenis.stop();
-        } else {
-          document.body.style.position = "";
-          document.body.style.top = "";
-          document.body.style.left = "";
-          document.body.style.right = "";
-          document.body.style.width = "";
-          if (window.__lenis) {
-            window.__lenis.start();
-            window.__lenis.scrollTo(menuScrollY, { immediate: true });
-          } else {
-            window.scrollTo(0, menuScrollY);
-          }
-        }
-      }
-
-      window.addEventListener("scroll", function () {
-        if (document.body.classList.contains("menu-open")) return;
-        var y = window.scrollY;
-        nav.classList.toggle("solid", y > 40);
-        nav.classList.toggle("hidden", y > 400 && y > lastY);
-        lastY = y;
-        /* progress bar */
-        var h = document.documentElement.scrollHeight - window.innerHeight;
-        document.getElementById("progress").style.transform = "scaleX(" + (h ? y / h : 0) + ")";
-      }, { passive: true });
-
-      var toggle = document.getElementById("navToggle");
-      toggle.addEventListener("click", function () {
-        setMenuOpen(!document.body.classList.contains("menu-open"));
-      });
-      document.getElementById("navLinks").addEventListener("click", function (e) {
-        if (e.target.tagName === "A") setMenuOpen(false);
-      });
-      window.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && document.body.classList.contains("menu-open")) setMenuOpen(false);
-      });
 
       /* active section highlight */
       var navAnchors = Array.prototype.slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
